@@ -11,6 +11,7 @@ import "./App.css";
 function App(props) {
   const [web3auth, setWeb3auth] = useState();
   const [provider, setProvider] = useState();
+  const [username, setUsername] = useState();
 
   useEffect(() => {
     const init = async () => {
@@ -31,6 +32,8 @@ function App(props) {
         await web3auth.initModal();
         if (web3auth.provider) {
           setProvider(web3auth.provider);
+          const userInfo = await getUserInfo();
+          setUsername(userInfo.name);
         }
       } catch (error) {
         console.error(error);
@@ -57,6 +60,7 @@ function App(props) {
     }
     const user = await web3auth.getUserInfo();
     console.log(user);
+    return user;
   };
 
   const logout = async () => {
@@ -168,7 +172,7 @@ function App(props) {
           <Invitation author={"Maria"} />
         </Route>
         <Route exact path="/home">
-          {provider ? <Home username="Jose" provider={provider} logout={logout} /> : unloggedInView}
+          {provider && username ? <Home username={username} provider={provider} logout={logout} /> : unloggedInView}
         </Route>
         <Route path="/new">{provider ? <New /> : unloggedInView}</Route>
         <Route path="/pool/:id">{provider ? <Pool /> : unloggedInView}</Route>
