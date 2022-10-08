@@ -43,6 +43,8 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    gap: 30px;
+    overflow-y: auto;
     padding: 40px;
 }
 
@@ -151,6 +153,11 @@
   color: white;
 }
 
+.screen .btn-green {
+  background: #00b475;
+  color: white;
+}
+
 .screen--user-list {
   list-style-type: none;
   margin: 0;
@@ -190,6 +197,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    gap: 15px;
     width: 100%;
 }
 

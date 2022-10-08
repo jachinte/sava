@@ -1,29 +1,7 @@
 import React from "react";
 import { Link, useParams } from "react-router-dom";
+import { getPoolData } from "../helpers";
 import "./Pool.css";
-
-function getPoolData(id) {
-  return {
-    id: 1,
-    name: "Trip to Cartagena!",
-    goal: 1000,
-    rewards: 14.121,
-    currency: "USDC",
-    days: 31,
-    participants: [
-      {
-        username: "Leon",
-        avatar: "/images/leon.png",
-        contribution: 410,
-      },
-      {
-        username: "Jose",
-        avatar: "/images/jose.png",
-        contribution: 101,
-      },
-    ],
-  };
-}
 
 /**
  * Pool screen.
@@ -70,8 +48,11 @@ function Pool() {
         ))}
       </div>
       <footer id="screen--footer">
+        <Link to={`/join/pool/${id}`}>
+          <span className="btn btn-lg btn-green">Invite your friends</span>
+        </Link>
         <Link to={`/contribution/pool/${id}`}>
-          <span className="btn btn-lg btn-blue">Complete Contribution</span>
+          <span className="btn btn-lg btn-blue">Complete contribution</span>
         </Link>
         <h4>31 days left</h4>
       </footer>

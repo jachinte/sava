@@ -97,8 +97,8 @@ function App(props) {
           <Route exact path="/">
             {auth(<Redirect to="/home" />)}
           </Route>
-          <Route exact path="/join">
-            <Invitation author={"Maria"} />
+          <Route exact path="/join/pool/:pool">
+            <Invitation />
           </Route>
           <Route exact path="/home">
             {auth(<Home provider={provider} userInfo={userInfo} />)}
