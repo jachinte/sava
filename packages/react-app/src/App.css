@@ -62,12 +62,12 @@ html, body {
 
 .screen h3 {
   color: #B4B4B4;
-  font-size: 2.2em;
+  font-size: 1.8em;
   font-weight: bold;
 }
 
 .screen h4 {
-  font-size: 1.8em;
+  font-size: 1.6em;
   font-weight: bold;
   margin: 0;
   padding: 0;
@@ -77,6 +77,14 @@ html, body {
   color: #585858;
   font-size: 0.9em;
   font-weight: bold;
+}
+
+.screen .text-light {
+  font-weight: 300;
+}
+
+.screen .green-text {
+  color: #34A853;
 }
 
 .screen .uppercase {

@@ -57,7 +57,7 @@ function Home({ username, pools }) {
         <Link to="/new">
           <div id="footer-btn">
             <div className="btn-group">
-              <span>Add a new pool</span> <span className="btn-add btn-blue">+</span>
+              <span className="btn-label">Add a new pool</span> <span className="btn-add btn-blue">+</span>
             </div>
           </div>
         </Link>

@@ -21,3 +21,9 @@
   margin-top: 40px;
   width: 100%;
 }
+
+#footer-btn .btn-label {
+  font-size: 1.4em;
+  font-weight: bold;
+  color: black;
+}

@@ -15,10 +15,12 @@ function App(props) {
         {
           username: "Leon",
           avatar: "/images/leon.png",
+          contribution: 410,
         },
         {
           username: "Jose",
           avatar: "/images/jose.png",
+          contribution: 101,
         },
       ],
     },
