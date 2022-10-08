@@ -3,61 +3,14 @@ import React, { useEffect, useState } from "react";
 import { Web3Auth } from "@web3auth/web3auth";
 import { CHAIN_NAMESPACES } from "@web3auth/base";
 import { Route, Switch } from "react-router-dom";
-import { SignIn, Home, Pool, Invitation, Contribution } from "./views";
+import { SignIn, Home, Pool, Invitation, Contribution, New } from "./views";
 import { CLIENT_ID, MUMBAI_CHAIN_ID, ALCHEMY_KEY } from "./constants";
-import contracts from "./contracts/external_contracts";
 import RPC from "./hooks/web3RPC";
 import "./App.css";
-import Web3 from "web3";
-
-const pools = [
-  {
-    id: 1,
-    name: "Trip to Cartagena!",
-    goal: 1000,
-    currency: "USDC",
-    days: 31,
-    winnerSelected: false,
-    participants: [
-      {
-        username: "Leon",
-        avatar: "/images/leon.png",
-        contribution: 410,
-      },
-      {
-        username: "Jose",
-        avatar: "/images/jose.png",
-        contribution: 101,
-      },
-    ],
-  },
-  {
-    id: 2,
-    name: "Trip to Canada!",
-    goal: 1000,
-    currency: "USDC",
-    days: 31,
-    winnerSelected: true,
-    winner: "Jose",
-    participants: [
-      {
-        username: "Leon",
-        avatar: "/images/leon.png",
-        contribution: 410,
-      },
-      {
-        username: "Jose",
-        avatar: "/images/jose.png",
-        contribution: 101,
-      },
-    ],
-  },
-];
 
 function App(props) {
   const [web3auth, setWeb3auth] = useState();
   const [provider, setProvider] = useState();
-  const [contract, setContract] = useState();
 
   useEffect(() => {
     const init = async () => {
@@ -85,14 +38,7 @@ function App(props) {
     };
 
     init();
-
-    // if (provider) {
-    //   const web3 = new Web3(provider);
-    //   const SavingsPool = contracts[1].contracts.SavingsPool;
-    //   const response = new web3.eth.Contract(SavingsPool.abi, SavingsPool.address);
-    //   setContract(response);
-    // }
-  }, []);
+  }, [provider]);
 
   const login = async () => {
     if (!web3auth) {
@@ -222,8 +168,9 @@ function App(props) {
           <Invitation author={"Maria"} />
         </Route>
         <Route exact path="/home">
-          {provider ? <Home username="Jose" pools={pools} provider={provider} contract={contract} /> : unloggedInView}
+          {provider ? <Home username="Jose" provider={provider} logout={logout} /> : unloggedInView}
         </Route>
+        <Route path="/new">{provider ? <New /> : unloggedInView}</Route>
         <Route path="/pool/:id">{provider ? <Pool /> : unloggedInView}</Route>
         <Route path="/contribution/pool/:id">{provider ? <Contribution /> : unloggedInView}</Route>
       </Switch>

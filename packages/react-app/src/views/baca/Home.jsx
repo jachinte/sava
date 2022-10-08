@@ -1,7 +1,53 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import Web3 from "web3";
+import contracts from "../../contracts/external_contracts";
 import RPC from "../../hooks/web3RPC";
 import "./Home.css";
+
+const pools = [
+  {
+    id: 1,
+    name: "Trip to Cartagena!",
+    goal: 1000,
+    currency: "USDC",
+    days: 31,
+    winnerSelected: false,
+    participants: [
+      {
+        username: "Leon",
+        avatar: "/images/leon.png",
+        contribution: 410,
+      },
+      {
+        username: "Jose",
+        avatar: "/images/jose.png",
+        contribution: 101,
+      },
+    ],
+  },
+  {
+    id: 2,
+    name: "Trip to Canada!",
+    goal: 1000,
+    currency: "USDC",
+    days: 31,
+    winnerSelected: true,
+    winner: "Jose",
+    participants: [
+      {
+        username: "Leon",
+        avatar: "/images/leon.png",
+        contribution: 410,
+      },
+      {
+        username: "Jose",
+        avatar: "/images/jose.png",
+        contribution: 101,
+      },
+    ],
+  },
+];
 
 function PoolItem({ data }) {
   const formatter = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 2 });
@@ -49,24 +95,35 @@ function PoolItem({ data }) {
  * Home screen.
  * @returns react component
  **/
-function Home({ username, pools, provider, contract }) {
-  const [data, setData] = useState({});
-  const [error, setError] = useState();
+function Home({ username, provider }) {
+  const [address, setAddress] = useState();
+  const [contract, setContract] = useState();
+  const [userPools, setUserPools] = useState();
 
-  // const address = RPC.getAccounts(provider);
-  // const response = contract.methods.getSavingPoolsIndexesPerUser(address).call();
-  // console.log(response);
+  useEffect(() => {
+    async function fetchData() {
+      setAddress(await RPC.getAccounts(provider));
+      const web3 = new Web3(provider);
+      const SavingsPool = contracts[1].contracts.SavingsPool;
+      const response = new web3.eth.Contract(SavingsPool.abi, SavingsPool.address);
+      setContract(response);
+    }
+    fetchData();
+  }, [provider]);
 
-  const notice = <h3>There was an error loading your pools.</h3>;
+  useEffect(() => {
+    async function fetchData() {
+      if (contract) {
+        const response = await contract.methods.getSavingPoolsIndexesPerUser(address).call();
+        setUserPools(response);
+      }
+    }
+    fetchData();
+  }, [address, contract]);
 
-  const items = (
-    <>
-      <h3>Your existing pools</h3>
-      {pools.map(pool => (
-        <PoolItem key={pool.id} data={pool} />
-      ))}
-    </>
-  );
+  if (userPools) {
+    console.log("userPools", userPools);
+  }
 
   return (
     <div id="home" className="screen">
@@ -74,7 +131,12 @@ function Home({ username, pools, provider, contract }) {
         <div id="screen--illustration"></div>
         <h1 id="screen--title">Welcome back, {username}!</h1>
       </header>
-      <div id="screen--main">{error ? notice : items}</div>
+      <div id="screen--main">
+        <h3>Your existing pools</h3>
+        {pools.map(pool => (
+          <PoolItem key={pool.id} data={pool} />
+        ))}
+      </div>
       <footer id="screen--footer">
         <Link to="/new">
           <div id="footer-btn">
