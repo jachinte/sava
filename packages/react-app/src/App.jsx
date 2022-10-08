@@ -2,7 +2,7 @@ import "antd/dist/antd.css";
 import React, { useEffect, useState } from "react";
 import { Web3Auth } from "@web3auth/web3auth";
 import { CHAIN_NAMESPACES } from "@web3auth/base";
-import { Route, Switch } from "react-router-dom";
+import { Redirect, Route, Switch } from "react-router-dom";
 import { SignIn, Home, Pool, Invitation, Contribution, New, Confirmation } from "./views";
 import { CLIENT_ID, MUMBAI_CHAIN_ID, ALCHEMY_KEY } from "./constants";
 import RPC from "./hooks/web3RPC";
@@ -156,24 +156,30 @@ function App(props) {
     </>
   );
 
-  const unloggedInView = <SignIn web3auth={web3auth} provider={provider} setProvider={setProvider} />;
+  const auth = View => {
+    if (typeof provider === undefined) {
+      return <SignIn web3auth={web3auth} provider={provider} setProvider={setProvider} />;
+    } else {
+      return View;
+    }
+  };
 
   return (
     <div id="app">
       <Switch>
         <Route exact path="/">
-          {unloggedInView}
+          {auth(<Redirect to="/home" />)}
         </Route>
         <Route exact path="/join">
           <Invitation author={"Maria"} />
         </Route>
         <Route exact path="/home">
-          {provider ? <Home username="Jose" provider={provider} logout={logout} /> : unloggedInView}
+          {auth(<Home username="Jose" provider={provider} logout={logout} />)}
         </Route>
-        <Route path="/new">{provider ? <New /> : unloggedInView}</Route>
-        <Route path="/pool/:id">{provider ? <Pool /> : unloggedInView}</Route>
-        <Route path="/contribution/pool/:id">{provider ? <Contribution /> : unloggedInView}</Route>
-        <Route path="/confirmation/:pool/:amount">{provider ? <Confirmation /> : unloggedInView}</Route>
+        <Route path="/new">{auth(<New />)}</Route>
+        <Route path="/pool/:id">{auth(<Pool />)}</Route>
+        <Route path="/contribution/pool/:id">{auth(<Contribution />)}</Route>
+        <Route path="/confirmation/:pool/:amount">{auth(<Confirmation />)}</Route>
       </Switch>
     </div>
   );
