@@ -70,6 +70,12 @@ body[data-theme="dark"] .signin--main-title {
   width: 100%;
 }
 
+.signin--buttons-2 button {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
 .signin--btn {
     border-radius: 100%;
     display: block;
