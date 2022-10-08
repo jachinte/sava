@@ -52,28 +52,25 @@ function App(props) {
   }, [provider]);
 
   const logout = async () => {
-    if (!web3auth) {
-      console.error("web3auth not initialized yet");
-      return;
+    if (web3auth) {
+      await web3auth.logout();
+      setProvider(null);
+      history.push("/");
     }
-    await web3auth.logout();
-    setProvider(null);
-    history.push("/");
   };
 
   const auth = View => {
     if (provider && username) {
       return View;
-    } else {
-      return (
-        <SignIn
-          web3auth={web3auth}
-          provider={provider}
-          setProvider={setProvider}
-          redirectPath={history.location.pathname}
-        />
-      );
     }
+    return (
+      <SignIn
+        web3auth={web3auth}
+        provider={provider}
+        setProvider={setProvider}
+        redirectPath={history.location.pathname}
+      />
+    );
   };
 
   return (
