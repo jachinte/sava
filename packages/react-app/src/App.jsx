@@ -79,8 +79,7 @@ function App(props) {
       console.log("provider not initialized yet");
       return;
     }
-    const rpc = new RPC(provider);
-    const chainId = await rpc.getChainId();
+    const chainId = await RPC.getChainId(provider);
     console.log(chainId);
   };
   const getAccounts = async () => {
@@ -88,8 +87,7 @@ function App(props) {
       console.log("provider not initialized yet");
       return;
     }
-    const rpc = new RPC(provider);
-    const address = await rpc.getAccounts();
+    const address = await RPC.getAccounts(provider);
     console.log(address);
   };
 
@@ -100,8 +98,7 @@ function App(props) {
       console.log("provider not initialized yet");
       return;
     }
-    const rpc = new RPC(provider);
-    const balance = await rpc.getBalance();
+    const balance = await RPC.getBalance(provider);
     yourLocalBalance = balance;
     console.log(balance);
   };
@@ -111,8 +108,7 @@ function App(props) {
       console.log("provider not initialized yet");
       return;
     }
-    const rpc = new RPC(provider);
-    const receipt = await rpc.sendTransaction();
+    const receipt = await RPC.sendTransaction(provider);
     console.log(receipt);
   };
 
@@ -121,8 +117,7 @@ function App(props) {
       console.log("provider not initialized yet");
       return;
     }
-    const rpc = new RPC(provider);
-    const signedMessage = await rpc.signMessage();
+    const signedMessage = await RPC.signMessage(provider);
     console.log(signedMessage);
   };
 
@@ -131,8 +126,7 @@ function App(props) {
       console.log("provider not initialized yet");
       return;
     }
-    const rpc = new RPC(provider);
-    const privateKey = await rpc.getPrivateKey();
+    const privateKey = await RPC.getPrivateKey(provider);
     console.log(privateKey);
   };
   const loggedInView = (
