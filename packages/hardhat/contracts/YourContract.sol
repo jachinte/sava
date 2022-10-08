@@ -7,7 +7,6 @@ contract YourContract {
     struct SavingPool {
         uint256 savingPoolId;
         string name;
-        SavingPoolState poolState; //the pool state
         uint256 individualGoal; //the individual goal
         uint256 startDate; // the pool start date
         uint256 endDate; // the pool end date
@@ -19,9 +18,8 @@ contract YourContract {
         uint256 numberOfContributors; //number of contributors in the pool
         bool winnerSelected; //flag to determine if the saving pool has a winner or not
         address winner; //winner of the rewards pool
+        address [] contributors;
     }
-
-    enum SavingPoolState {OPEN, CLOSED}
 
     //Saving pools array
     SavingPool[] public savingPools;
@@ -37,7 +35,6 @@ contract YourContract {
         SavingPool storage firstSavingPool = savingPools.push();
         firstSavingPool.name = "Road to Devcon Bogota";
         firstSavingPool.savingPoolId = 0;
-        firstSavingPool.poolState = SavingPoolState.OPEN;
         firstSavingPool.individualGoal = 100;
         firstSavingPool.startDate = 1665125434;
         firstSavingPool.endDate = 1678171834;
@@ -60,7 +57,6 @@ contract YourContract {
         SavingPool storage newSavingPool = savingPools.push();
         newSavingPool.name = name;
         newSavingPool.savingPoolId = autoincrementSavingPoolIndex;
-        newSavingPool.poolState = SavingPoolState.OPEN;
         newSavingPool.individualGoal = individualGoal;
         newSavingPool.startDate = startDate;
         newSavingPool.endDate = endDate;
@@ -83,8 +79,6 @@ contract YourContract {
 
         //Get saving pool
         SavingPool storage currentSavingPool = savingPools[savingPoolId];
-
-        require(currentSavingPool.poolState == SavingPoolState.OPEN, "The saving pool is not open");
 
         //Date validations
         require(block.timestamp >= currentSavingPool.startDate, "User cannot contribute before the start date");
@@ -113,18 +107,6 @@ contract YourContract {
 
     }   
 
-    /**
-    *@dev Close a saving pool
-    *@param savingPoolId the saving pool index
-    */
-    function closeSavingPool(uint savingPoolId) public {
-        SavingPool storage currentSavingPool = savingPools[savingPoolId];
-
-        require(currentSavingPool.poolState == SavingPoolState.OPEN, "The saving pool should be open");
-        require(block.timestamp >= currentSavingPool.endDate);
-
-        currentSavingPool.poolState = SavingPoolState.CLOSED;
-    }
 
     /*function supplyToYieldProvider(uint amount) public returns (bool) {
 
@@ -171,7 +153,6 @@ contract YourContract {
     *@param savingPoolId the saving pool index
     */
     function getClaimableSavingsAmountPerUserInPool(uint savingPoolId, address user) public view returns(uint256) {
-        require(savingPools[savingPoolId].poolState == SavingPoolState.CLOSED, "The saving pool should be closed");
         require(savingPools[savingPoolId].claimings[user] == false, "User has claimed his savings before");
 
         uint256 claimableSavings = getUserContributionInSavingsPool(savingPoolId, user);
@@ -270,7 +251,7 @@ contract YourContract {
         uint256 poolsPerUser = getTotalPoolsPerUser(user);
 
         uint256[] memory indexes = new uint256[](poolsPerUser);
-        
+
         uint j = 0;
 
         for(uint i = 0; i < savingPools.length; i++){
@@ -294,7 +275,7 @@ contract YourContract {
         uint counter = 0;
         for(uint i = 0; i < savingPools.length; i++){
             SavingPool storage currentSavingPool = savingPools[i];
-            if(currentSavingPool.contributions[user] > 0 && currentSavingPool.poolState == SavingPoolState.OPEN){
+            if(currentSavingPool.contributions[user] > 0){
                 counter++;
             }
         }
