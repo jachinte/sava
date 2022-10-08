@@ -9,7 +9,6 @@ import "./Contribution.css";
 function Contribution() {
   const { id } = useParams();
   const [amount, setAmount] = useState(0);
-  const username = "leon"; // TODO Get this from the session
   const individualGoal = 500;
   const balance = 410;
   const maximumAllowed = individualGoal - balance;

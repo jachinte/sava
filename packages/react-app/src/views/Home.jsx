@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Web3 from "web3";
-import contracts from "../../contracts/external_contracts";
-import RPC from "../../hooks/web3RPC";
-import poolContract from "../../hooks/poolContract";
+import contracts from "../contracts/external_contracts";
+import RPC from "../hooks/web3RPC";
+import poolContract from "../hooks/poolContract";
 import "./Home.css";
 
 const pools = [
@@ -140,8 +140,19 @@ function Home({ provider, userInfo }) {
         <h1 id="screen--title">Welcome back, {userInfo.name.split(" ")[0]}!</h1>
       </header>
       <div id="screen--main">
-        <h3>Your existing pools</h3>
-        {userPools ? userPools.map(pool => <PoolItem key={pool["0"]} data={pool} />) : <div></div>}
+        {userPools && userPools.length > 0 ? (
+          <>
+            <h3>Your existing pools</h3>
+            {userPools.map(pool => (
+              <PoolItem key={pool["0"]} data={pool} />
+            ))}
+          </>
+        ) : (
+          <>
+            <h4>You haven't joined any pools yet.</h4>
+            <div className="screen--empty-state"></div>
+          </>
+        )}
       </div>
       <footer id="screen--footer">
         <Link to="/new">
