@@ -18,7 +18,6 @@ function App(props) {
       const user = await web3auth.getUserInfo();
       return user;
     }
-    console.error("web3auth not initialized yet");
   };
 
   useEffect(() => {

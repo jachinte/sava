@@ -114,6 +114,15 @@ html, body {
   width: 100%;
 }
 
+.screen--empty-state {
+  background: url("./assets/no-data.svg") no-repeat center center;
+  background-size: contain;
+  height: 180px;
+  margin: 30px;
+  opacity: 0.6;
+  width: 100%;
+}
+
 .screen .title-bar {
   align-items: center;
   display: flex;
