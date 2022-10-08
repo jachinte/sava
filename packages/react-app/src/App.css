@@ -24,3 +24,10 @@ html, body {
     height: 100%;
     width: 100%;
 }
+
+#screen--title {
+    font-size: 4em;
+    font-weight: bolder;
+    line-height: 1.1em;
+    text-align: center;
+}

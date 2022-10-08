@@ -3,7 +3,7 @@ import { useBalance } from "eth-hooks";
 import React, { useState } from "react";
 import { Route, Switch } from "react-router-dom";
 import { NETWORKS } from "./constants";
-import { SignIn, Pool } from "./views";
+import { SignIn, Pool, Invitation } from "./views";
 import { useStaticJsonRPC } from "./hooks";
 import "./App.css";
 
@@ -23,7 +23,10 @@ function App(props) {
     <div id="app">
       <Switch>
         <Route exact path="/">
-          <SignIn yourLocalBalance={yourLocalBalance} />
+          <SignIn />
+        </Route>
+        <Route exact path="/join">
+          <Invitation author={"Maria"} />
         </Route>
         <Route exact path="/pool">
           <Pool yourLocalBalance={yourLocalBalance} />

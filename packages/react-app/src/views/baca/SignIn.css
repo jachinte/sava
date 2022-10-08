@@ -7,13 +7,14 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    padding: 80px 40px;
+    padding: 40px;
 }
 
 #signin--header {
     display: flex;
     flex-direction: column;
     gap: 40px;
+    width: 100%;
 }
 
 #signin--illustration {
@@ -77,4 +78,8 @@ body[data-theme="dark"] .signin--main-title {
     background-repeat: no-repeat;
     background-position: center center;
     background-size: cover;
+}
+
+#signin--footer {
+    min-height: 150px;
 }
