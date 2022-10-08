@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import Web3 from "web3";
 import contracts from "../../contracts/external_contracts";
 import RPC from "../../hooks/web3RPC";
+import poolContract from "../../hooks/poolContract";
 import "./Home.css";
 
 const pools = [
@@ -73,19 +74,23 @@ function PoolItem({ data }) {
           in <b>{data.days} days</b>.
         </p>
       </header>
-      <div>
-        <h5 className="uppercase">Pool participants ({data.participants.length})</h5>
-        <ul className="screen--user-list">
-          {data.participants.map(participant => (
-            <li ket={participant.username}>
-              <img alt={participant.username} src={participant.avatar} />
-              <span className="uppercase">
-                <b>{participant.username}</b>
-              </span>
-            </li>
-          ))}
-        </ul>
-      </div>
+      {data.participants ? (
+        <div>
+          <h5 className="uppercase">Pool participants ({data.participants.length})</h5>
+          <ul className="screen--user-list">
+            {data.participants.map(participant => (
+              <li ket={participant.username}>
+                <img alt={participant.username} src={participant.avatar} />
+                <span className="uppercase">
+                  <b>{participant.username}</b>
+                </span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ) : (
+        <div></div>
+      )}
       {data.winnerSelected ? winnerSpan : openButton}
     </div>
   );
@@ -96,13 +101,15 @@ function PoolItem({ data }) {
  * @returns react component
  **/
 function Home({ username, provider }) {
+  const [web3auth, setWeb3auth] = useState();
   const [address, setAddress] = useState();
   const [contract, setContract] = useState();
   const [userPools, setUserPools] = useState();
 
   useEffect(() => {
     async function fetchData() {
-      setAddress(await RPC.getAccounts(provider));
+      const account = await RPC.getAccounts(provider);
+      setAddress(account);
       const web3 = new Web3(provider);
       const SavingsPool = contracts[1].contracts.SavingsPool;
       const response = new web3.eth.Contract(SavingsPool.abi, SavingsPool.address);
@@ -114,16 +121,12 @@ function Home({ username, provider }) {
   useEffect(() => {
     async function fetchData() {
       if (contract) {
-        const response = await contract.methods.getSavingPoolsIndexesPerUser(address).call();
-        setUserPools(response);
+        const rpools = await poolContract.getUserPools(contract, address);
+        setUserPools(rpools);
       }
     }
     fetchData();
   }, [address, contract]);
-
-  if (userPools) {
-    console.log("userPools", userPools);
-  }
 
   return (
     <div id="home" className="screen">
@@ -133,9 +136,7 @@ function Home({ username, provider }) {
       </header>
       <div id="screen--main">
         <h3>Your existing pools</h3>
-        {pools.map(pool => (
-          <PoolItem key={pool.id} data={pool} />
-        ))}
+        {userPools ? userPools.map(pool => <PoolItem key={pool["0"]} data={pool} />) : <div></div>}
       </div>
       <footer id="screen--footer">
         <Link to="/new">

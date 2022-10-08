@@ -11,6 +11,7 @@ import "./App.css";
 function App(props) {
   const [web3auth, setWeb3auth] = useState();
   const [provider, setProvider] = useState();
+  const [username, setUsername] = useState();
 
   useEffect(() => {
     const init = async () => {
@@ -29,8 +30,10 @@ function App(props) {
         setWeb3auth(web3auth);
 
         await web3auth.initModal();
-        if (web3auth.provider) {
+        if (typeof web3auth.provider !== undefined) {
           setProvider(web3auth.provider);
+          const userInfo = await getUserInfo();
+          setUsername(userInfo.name);
         }
       } catch (error) {
         console.error(error);
@@ -40,28 +43,19 @@ function App(props) {
     init();
   }, [provider]);
 
-  const login = async () => {
-    if (!web3auth) {
-      console.log("web3auth not initialized yet");
-      return;
-    }
-    console.log("web3auth is already initialized");
-    const web3authProvider = await web3auth.connect();
-    setProvider(web3authProvider);
-  };
-
   const getUserInfo = async () => {
-    if (!web3auth) {
-      console.log("web3auth not initialized yet");
+    if (typeof web3auth === undefined) {
+      console.error("web3auth not initialized yet");
       return;
     }
     const user = await web3auth.getUserInfo();
     console.log(user);
+    return user;
   };
 
   const logout = async () => {
-    if (!web3auth) {
-      console.log("web3auth not initialized yet");
+    if (typeof web3auth === undefined) {
+      console.error("web3auth not initialized yet");
       return;
     }
     await web3auth.logout();
@@ -69,7 +63,7 @@ function App(props) {
   };
 
   const getChainId = async () => {
-    if (!provider) {
+    if (typeof provider === undefined) {
       console.log("provider not initialized yet");
       return;
     }
@@ -77,7 +71,7 @@ function App(props) {
     console.log(chainId);
   };
   const getAccounts = async () => {
-    if (!provider) {
+    if (typeof provider === undefined) {
       console.log("provider not initialized yet");
       return;
     }
@@ -88,7 +82,7 @@ function App(props) {
   let yourLocalBalance = 0;
 
   const getBalance = async () => {
-    if (!provider) {
+    if (typeof provider === undefined) {
       console.log("provider not initialized yet");
       return;
     }
@@ -98,7 +92,7 @@ function App(props) {
   };
 
   const sendTransaction = async () => {
-    if (!provider) {
+    if (typeof provider === undefined) {
       console.log("provider not initialized yet");
       return;
     }
@@ -107,7 +101,7 @@ function App(props) {
   };
 
   const signMessage = async () => {
-    if (!provider) {
+    if (typeof provider === undefined) {
       console.log("provider not initialized yet");
       return;
     }
@@ -116,7 +110,7 @@ function App(props) {
   };
 
   const getPrivateKey = async () => {
-    if (!provider) {
+    if (typeof provider === undefined) {
       console.log("provider not initialized yet");
       return;
     }
@@ -156,8 +150,10 @@ function App(props) {
     </>
   );
 
+  const unloggedInview = <SignIn web3auth={web3auth} provider={provider} setProvider={setProvider} />;
+
   const auth = View => {
-    if (typeof provider === undefined) {
+    if (typeof provider === undefined || typeof username === undefined) {
       return <SignIn web3auth={web3auth} provider={provider} setProvider={setProvider} />;
     } else {
       return View;
@@ -174,7 +170,8 @@ function App(props) {
           <Invitation author={"Maria"} />
         </Route>
         <Route exact path="/home">
-          {auth(<Home username="Jose" provider={provider} logout={logout} />)}
+          {provider && username ? <Home username={username} provider={provider} logout={logout} /> : unloggedInview}
+          {/* {auth(<Home username={username} provider={provider} logout={logout} />)} */}
         </Route>
         <Route path="/new">{auth(<New />)}</Route>
         <Route path="/pool/:id">{auth(<Pool />)}</Route>
