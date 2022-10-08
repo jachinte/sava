@@ -20,9 +20,14 @@ function SignIn({ yourLocalBalance }) {
           <br />
           With
         </div>
-        <Link to="/pool">
-          <span className="signin--btn signin--btn-facebook"></span>
-        </Link>
+        <nav className="signin--buttons">
+          <Link to="/pool">
+            <span className="signin--btn signin--btn-facebook"></span>
+          </Link>
+          <Link to="/pool">
+            <span className="signin--btn signin--btn-google"></span>
+          </Link>
+        </nav>
       </div>
       <footer></footer>
     </div>
