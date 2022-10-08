@@ -1,10 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0
 
-pragma solidity >=0.7.0 <0.9.0;
-
-import "@openzeppelin-contracts/token/ERC20/IERC20.sol";
-import "@aave-protocol/interfaces/IPool.sol";
-
+pragma solidity >=0.8.0 <0.9.0;
 
 contract YourContract {
 
@@ -33,9 +29,8 @@ contract YourContract {
     //Saving Pool Global Counter
     uint256 public autoincrementSavingPoolIndex; 
 
-    address public supplyTokenAddress = 0x001B3B4d0F3714Ca98ba10F6042DaEbF0B1B7b6F; // Mumbai Aave DAI
+    address public supplyTokenAddress = 0x0000000000000000000000000000000000001010; // Mumbai Aave MATIC
     address public aavePoolAddress = 0x6C9fB0D5bD9429eb9Cd96B85B81d872281771E6B; // Mumbai Aave Pool Address
-
 
 
     constructor () payable {
@@ -131,17 +126,24 @@ contract YourContract {
         currentSavingPool.poolState = SavingPoolState.CLOSED;
     }
 
-    function supplyToYieldProvider(uint amount) public returns (bool) {
+    /*function supplyToYieldProvider(uint amount) public returns (bool) {
 
-        //1. Approve Aave pool to access amount from this contract 
-        IERC20(supplyTokenAddress).approve(aavePoolAddress, amount);
+        // Retrieve LendingPool address
+        //LendingPoolAddressesProvider provider = LendingPoolAddressesProvider(address(0x24a42fD28C976A61Df5D00D0599C34c4f90748c8)); // mainnet address, for other addresses: https://docs.aave.com/developers/developing-on-aave/deployed-contract-instances
+        //LendingPool lendingPool = LendingPool(provider.getLendingPool());
 
-        // 2. Supply amount to Aave pool
-        IPool(aavePoolAddress).supply(supplyTokenAddress, amountToDrain, address(this), 0);
+        // Input variables
+        //address daiAddress = address(0x6B175474E89094C44Da98b954EedeAC495271d0F); // mainnet DAI
+        //uint256 amountToTransfer = 1000 * 1e18;
+        //uint16 referral = 0;
 
-        return true;
+        // Approve LendingPool contract to move your DAI
+        //IERC20(daiAddress).approve(provider.getLendingPoolCore(), amountToTransfer);
 
-    }
+        // Deposit 1000 DAI
+        //lendingPool.deposit(daiAddress, amountToTransfer, referral);
+
+    }*/
 
     /**
     *@dev Claim user savings
@@ -265,18 +267,39 @@ contract YourContract {
     *@param user the user
     */
     function getSavingPoolsIndexesPerUser(address user) public view returns(uint256 [] memory){
-      uint256[] memory indexes;
-      uint j = 0;
+        uint256 poolsPerUser = getTotalPoolsPerUser(user);
 
-      for(uint i = 0; i < savingPools.length; i++){
-        SavingPool storage currentSavingPool = savingPools[i];
-        if(currentSavingPool.contributions[user] > 0){
-          indexes[j] = i; 
-          j++;
+        uint256[] memory indexes = new uint256[](poolsPerUser);
+        
+        uint j = 0;
+
+        for(uint i = 0; i < savingPools.length; i++){
+            SavingPool storage currentSavingPool = savingPools[i];
+            if(currentSavingPool.contributions[user] > 0){
+                indexes[j] = i;
+                j++;
+            }
         }
-      }
 
       return indexes;
+    }
+
+    /**
+    *@dev Get number of pool where user is participating and is open
+    *@param user address
+    *
+    */
+    function getTotalPoolsPerUser(address user) public view returns (uint256){
+
+        uint counter = 0;
+        for(uint i = 0; i < savingPools.length; i++){
+            SavingPool storage currentSavingPool = savingPools[i];
+            if(currentSavingPool.contributions[user] > 0 && currentSavingPool.poolState == SavingPoolState.OPEN){
+                counter++;
+            }
+        }
+
+        return counter;
     }
 
 }
