@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import "./Contribution.css";
 
@@ -7,6 +7,8 @@ import "./Contribution.css";
  * @returns react component
  **/
 function New() {
+  const [amount, setAmount] = useState(0);
+  const formatter = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 2 });
   return (
     <div id="contribution" className="screen">
       <header id="screen--header">
@@ -16,6 +18,7 @@ function New() {
       <div id="screen--main">
         <div>
           <h3>Enter a contribution</h3>
+          <input value={formatter.format(amount)} onChange={e => setAmount(e.target)} />
         </div>
         <div>
           <h5 className="uppercase">Maximum allowed</h5>

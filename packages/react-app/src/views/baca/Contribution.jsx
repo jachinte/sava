@@ -1,29 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import "./Contribution.css";
-
-function getPoolData(id) {
-  return {
-    id: 1,
-    name: "Trip to Cartagena!",
-    goal: 1000,
-    rewards: 14.121,
-    currency: "USDC",
-    days: 31,
-    participants: [
-      {
-        username: "Leon",
-        avatar: "/images/leon.png",
-        contribution: 410,
-      },
-      {
-        username: "Jose",
-        avatar: "/images/jose.png",
-        contribution: 101,
-      },
-    ],
-  };
-}
 
 /**
  * Contribution screen.
@@ -31,10 +8,10 @@ function getPoolData(id) {
  **/
 function Contribution() {
   const { id } = useParams();
+  const [amount, setAmount] = useState(0);
   const username = "leon"; // TODO Get this from the session
-  const data = getPoolData(id);
-  const balance = data.participants.map(p => p.contribution).reduce((sum, elem) => sum + elem, 0);
-  const individualGoal = data.goal / data.participants.length;
+  const individualGoal = 500;
+  const balance = 410;
   const maximumAllowed = individualGoal - balance;
   const formatter = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 2 });
   return (
@@ -46,18 +23,19 @@ function Contribution() {
       <div id="screen--main">
         <div>
           <h3>Enter a contribution</h3>
+          <input type="number" value={amount} onChange={e => setAmount(e.target.value)} />
         </div>
         <div>
           <h5 className="uppercase">Maximum allowed</h5>
-          <span>{formatter.format(maximumAllowed)}</span>
+          <h4>{formatter.format(maximumAllowed)}</h4>
         </div>
         <div>
           <h5 className="uppercase">Current contribution</h5>
-          <span>{formatter.format(balance)}</span>
+          <h4>{formatter.format(balance)}</h4>
         </div>
       </div>
       <footer id="screen--footer">
-        <Link to="/">
+        <Link to={`/confirmation/${id}/${amount}`}>
           <span className="btn btn-lg btn-blue">Make Contribution</span>
         </Link>
         <h4>31 days left</h4>

@@ -1,0 +1,24 @@
+#confirmation {
+  justify-content: center;
+  gap: 100px;
+  text-align: center;
+}
+
+#confirmation #screen--illustration {
+  background-image: url("../../assets/well-done.svg");
+  min-height: 260px;
+}
+
+#confirmation #screen--main {
+  gap: 30px;
+  width: 100%;
+}
+
+#confirmation #screen--main {
+  align-items: stretch;
+  justify-content: center;
+}
+
+#confirmation #screen--footer h4 {
+  color: #585858;
+}
