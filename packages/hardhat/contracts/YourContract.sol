@@ -240,5 +240,23 @@ contract YourContract {
         return currentSavingPool.contributions[user];        
     }
 
+    /**
+    *@dev Get saving pools indexes per user
+    *@param user the user
+    */
+    function getSavingPoolsIndexesPerUser(address user) public view returns(uint256 [] memory){
+      uint256[] memory indexes;
+      uint j = 0;
+
+      for(uint i = 0; i < savingPools.length; i++){
+        SavingPool storage currentSavingPool = savingPools[i];
+        if(currentSavingPool.contributions[user] > 0){
+          indexes[j] = i; 
+          j++;
+        }
+      }
+
+      return indexes;
+    }
 
 }
