@@ -69,9 +69,9 @@ function PoolItem({ data }) {
         <p>
           Save{" "}
           <b>
-            {formatter.format(data.goal)} {data.currency}
+            {formatter.format(data.individualGoal)} {data.currency}
           </b>{" "}
-          in <b>{data.days} days</b>.
+          in <b>{Math.round((data.endDate - data.startDate) / (24 * 3600))} days</b>.
         </p>
       </header>
       {data.participants ? (
