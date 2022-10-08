@@ -7,26 +7,38 @@ import "./Contribution.css";
  * @returns react component
  **/
 function New() {
-  const [amount, setAmount] = useState(0);
-  const formatter = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 2 });
+  const [name, setName] = useState();
+  const [individualGoal, setIndividualGoal] = useState(0);
+  const [date, setDate] = useState(new Date());
+  const id = 1;
   return (
     <div id="contribution" className="screen">
       <header id="screen--header">
         <div id="screen--illustration"></div>
-        <Link to={`/home`}>Go back.</Link>
+        <div className="title-bar">
+          <Link to={"/home"} id="goback-btn"></Link>
+          <h4>Create a new pool</h4>
+        </div>
       </header>
       <div id="screen--main">
         <div>
-          <h3>Enter a contribution</h3>
-          <input value={formatter.format(amount)} onChange={e => setAmount(e.target)} />
+          <h3>Pool name</h3>
+          <input type="text" value={name} onChange={e => setName(e.target.value)} />
         </div>
         <div>
-          <h5 className="uppercase">Maximum allowed</h5>
+          <h3>Individual goal</h3>
+          <input type="number" value={individualGoal} onChange={e => setIndividualGoal(e.target.value)} />
         </div>
         <div>
-          <h5 className="uppercase">Current contribution</h5>
+          <h3>Target date</h3>
+          <input type="date" value={date} onChange={e => setDate(e.target.value)} />
         </div>
       </div>
+      <footer id="screen--footer">
+        <Link to={`/pool/${id}`}>
+          <span className="btn btn-lg btn-blue">Create Pool</span>
+        </Link>
+      </footer>
     </div>
   );
 }
