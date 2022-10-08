@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
  **/
 function Pool({ yourLocalBalance }) {
   return (
-    <div>
+    <div className="screen">
       <Link to="/">Go to back to the sign in screen.</Link>
     </div>
   );

@@ -1,0 +1,69 @@
+#signin {
+    align-items: center;
+    background-image: url("../../assets/bg-wave.svg");
+    background-repeat: no-repeat;
+    background-position: center bottom;
+    background-size: contain;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 100px 40px;
+}
+
+#signin--header {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+
+#signin--illustration {
+    background-image: url("../../assets/door-guy.svg");
+    background-repeat: no-repeat;
+    background-position: center top;
+    background-size: contain;
+    min-height: 200px;
+    max-height: 300px;
+}
+
+#signin--main {
+    padding: 20px auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+    width: 100%;
+}
+
+.signin--main-title {
+    background-image: url("../../assets/divider.svg");
+    background-repeat: no-repeat;
+    background-position: center center;
+    text-align: center;
+    font-size: 2em;
+    line-height: 1.2em;
+    width: 100%;
+}
+
+body[data-theme="light"] .signin--main-title {
+    color: #666;
+}
+
+body[data-theme="dark"] .signin--main-title {
+    color: #bbb;
+}
+
+.signin--btn {
+    background: #eee;
+    border-radius: 100%;
+    display: block;
+    height: 80px;
+    width: 80px;
+}
+
+.signin--btn-facebook {
+    background-image: url("../../assets/facebook-btn.svg");
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+}

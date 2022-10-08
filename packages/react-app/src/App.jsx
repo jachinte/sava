@@ -2,11 +2,11 @@ import "antd/dist/antd.css";
 import { useBalance } from "eth-hooks";
 import React, { useState } from "react";
 import { Route, Switch } from "react-router-dom";
-import "./App.css";
 import { ThemeSwitch } from "./components";
 import { NETWORKS } from "./constants";
 import { SignIn, Pool } from "./views";
 import { useStaticJsonRPC } from "./hooks";
+import "./App.css";
 
 /// 📡 What chain are your contracts deployed to?
 const initialNetwork = NETWORKS.localhost; // Select your target frontend network (localhost, goerli, xdai, mainnet)
@@ -21,7 +21,7 @@ function App(props) {
   ]);
   const yourLocalBalance = useBalance(localProvider, address);
   return (
-    <div className="App">
+    <div id="app">
       <Switch>
         <Route exact path="/">
           <SignIn yourLocalBalance={yourLocalBalance} />
