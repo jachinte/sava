@@ -93,7 +93,9 @@ contract YourContract {
         //Update user contribution
         if(currentSavingPool.contributions[msg.sender] == 0){
             currentSavingPool.numberOfContributors++;
+            currentSavingPool.contributors.push(msg.sender);
         }
+
         currentSavingPool.contributions[msg.sender] += msg.value;
 
         //Determine if this transaction makes the user a winner of the rewards pool
@@ -281,6 +283,15 @@ contract YourContract {
         }
 
         return counter;
+    }
+
+    /**
+    *@dev Get contributors in a pool
+    *@param savingPoolId the saving pool id
+    *
+    */
+    function getContributorsInPool(uint savingPoolId) public view returns (address[] memory){
+        return savingPools[savingPoolId].contributors;
     }
 
 }
