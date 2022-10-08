@@ -73,6 +73,19 @@ const SAVINGSABI = [
   },
   {
     inputs: [],
+    name: "aavePoolAddress",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
     name: "autoincrementSavingPoolIndex",
     outputs: [
       {
@@ -254,6 +267,25 @@ const SAVINGSABI = [
   {
     inputs: [
       {
+        internalType: "address",
+        name: "user",
+        type: "address",
+      },
+    ],
+    name: "getTotalPoolsPerUser",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
         internalType: "uint256",
         name: "savingPoolId",
         type: "uint256",
@@ -338,6 +370,19 @@ const SAVINGSABI = [
       {
         internalType: "address",
         name: "winner",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "supplyTokenAddress",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
         type: "address",
       },
     ],

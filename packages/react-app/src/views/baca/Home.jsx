@@ -100,20 +100,19 @@ function PoolItem({ data }) {
  * Home screen.
  * @returns react component
  **/
-function Home({ username, provider }) {
-  const [web3auth, setWeb3auth] = useState();
+function Home({ username, provider, logout }) {
   const [address, setAddress] = useState();
   const [contract, setContract] = useState();
   const [userPools, setUserPools] = useState();
 
   useEffect(() => {
     async function fetchData() {
-      const account = await RPC.getAccounts(provider);
-      setAddress(account);
-      const web3 = new Web3(provider);
-      const SavingsPool = contracts[1].contracts.SavingsPool;
-      const response = new web3.eth.Contract(SavingsPool.abi, SavingsPool.address);
-      setContract(response);
+      if (provider) {
+        setAddress(await RPC.getAccounts(provider));
+        const web3 = new Web3(provider);
+        const SavingsPool = contracts[1].contracts.SavingsPool;
+        setContract(new web3.eth.Contract(SavingsPool.abi, SavingsPool.address));
+      }
     }
     fetchData();
   }, [provider]);
@@ -121,8 +120,7 @@ function Home({ username, provider }) {
   useEffect(() => {
     async function fetchData() {
       if (contract) {
-        const rpools = await poolContract.getUserPools(contract, address);
-        setUserPools(rpools);
+        setUserPools(await poolContract.getUserPools(contract, address));
       }
     }
     fetchData();
@@ -133,6 +131,7 @@ function Home({ username, provider }) {
       <header id="screen--header">
         <div id="screen--illustration"></div>
         <h1 id="screen--title">Welcome back, {username}!</h1>
+        <button onClick={logout}>logout</button>
       </header>
       <div id="screen--main">
         <h3>Your existing pools</h3>
