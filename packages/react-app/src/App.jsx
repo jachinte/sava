@@ -4,10 +4,11 @@ import { Web3Auth } from "@web3auth/web3auth";
 import { CHAIN_NAMESPACES } from "@web3auth/base";
 import { Route, Switch } from "react-router-dom";
 import { SignIn, Home, Pool, Invitation, Contribution } from "./views";
+import { CLIENT_ID, MUMBAI_CHAIN_ID, ALCHEMY_KEY } from "./constants";
+import contracts from "./contracts/external_contracts";
 import RPC from "./hooks/web3RPC";
 import "./App.css";
-
-const clientId = "BFt8f0zCLJtfThnpTEsmOs8EdgHgmIkKsObguZbdp7XEEwheU4BCDH8shgSBQ3l-UVTKV0qqrLIEnsXSYe35kpE"; // get from https://dashboard.web3auth.io
+import Web3 from "web3";
 
 const pools = [
   {
@@ -56,18 +57,19 @@ const pools = [
 function App(props) {
   const [web3auth, setWeb3auth] = useState();
   const [provider, setProvider] = useState();
+  const [contract, setContract] = useState();
 
   useEffect(() => {
     const init = async () => {
       try {
         const web3auth = new Web3Auth({
-          clientId,
+          clientId: CLIENT_ID,
           chainConfig: {
             chainNamespace: CHAIN_NAMESPACES.EIP155,
             // polygon mumbai chain-id in hex
-            chainId: "0x13881",
+            chainId: MUMBAI_CHAIN_ID,
             // This is the public RPC we have added, please pass on your own endpoint while creating an app
-            rpcTarget: "https://polygon-mumbai.g.alchemy.com/v2/RGPhWsJCplbShwpSYOo1Df7oplSaTl8d",
+            rpcTarget: `https://polygon-mumbai.g.alchemy.com/v2/${ALCHEMY_KEY}`,
           },
         });
 
@@ -83,6 +85,13 @@ function App(props) {
     };
 
     init();
+
+    // if (provider) {
+    //   const web3 = new Web3(provider);
+    //   const SavingsPool = contracts[1].contracts.SavingsPool;
+    //   const response = new web3.eth.Contract(SavingsPool.abi, SavingsPool.address);
+    //   setContract(response);
+    // }
   }, []);
 
   const login = async () => {
@@ -201,23 +210,19 @@ function App(props) {
     </>
   );
 
-  const unloggedInView = (
-    <button onClick={login} className="card">
-      Login
-    </button>
-  );
+  const unloggedInView = <SignIn web3auth={web3auth} provider={provider} setProvider={setProvider} />;
 
   return (
     <div id="app">
       <Switch>
         <Route exact path="/">
-          <SignIn />
+          {unloggedInView}
         </Route>
         <Route exact path="/join">
           <Invitation author={"Maria"} />
         </Route>
         <Route exact path="/home">
-          {provider ? <Home username="Jose" pools={pools} /> : unloggedInView}
+          {provider ? <Home username="Jose" pools={pools} provider={provider} contract={contract} /> : unloggedInView}
         </Route>
         <Route path="/pool/:id">{provider ? <Pool /> : unloggedInView}</Route>
         <Route path="/contribution/pool/:id">{provider ? <Contribution /> : unloggedInView}</Route>

@@ -54,16 +54,27 @@ body[data-theme="dark"] .signin--main-title {
 }
 
 .signin--buttons {
-    display: flex;
-    flex-direction: row;
-    gap: 30px;
+  display: flex;
+  flex-direction: row;
+  gap: 30px;
+}
+
+.signin--buttons-2 {
+  background-image: url("../../assets/divider.svg");
+  background-repeat: no-repeat;
+  background-position: center center;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 30px;
+  width: 100%;
 }
 
 .signin--btn {
     border-radius: 100%;
     display: block;
-    height: 80px;
-    width: 80px;
+    height: 120px;
+    width: 120px;
 }
 
 .signin--btn-facebook {
@@ -78,6 +89,15 @@ body[data-theme="dark"] .signin--main-title {
     background-repeat: no-repeat;
     background-position: center center;
     background-size: cover;
+}
+
+.signin--btn-generic {
+  background: #1977F3;
+  color: white;
+  font-size: 1.8em;
+  font-weight: bolder;
+  line-height: 4;
+  text-align: center;
 }
 
 #signin--footer {

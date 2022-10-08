@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import RPC from "../../hooks/web3RPC";
 import "./Home.css";
 
 function PoolItem({ data }) {
@@ -48,9 +49,13 @@ function PoolItem({ data }) {
  * Home screen.
  * @returns react component
  **/
-function Home({ username, pools }) {
+function Home({ username, pools, provider, contract }) {
   const [data, setData] = useState({});
   const [error, setError] = useState();
+
+  // const address = RPC.getAccounts(provider);
+  // const response = contract.methods.getSavingPoolsIndexesPerUser(address).call();
+  // console.log(response);
 
   const notice = <h3>There was an error loading your pools.</h3>;
 

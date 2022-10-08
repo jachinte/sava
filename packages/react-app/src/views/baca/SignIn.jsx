@@ -1,13 +1,23 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 import "./SignIn.css";
 
 /**
  * Sign in screen.
  * @returns react component
  **/
-function SignIn() {
-  return (
+function SignIn({ web3auth, provider, setProvider }) {
+  const login = async () => {
+    console.log("click");
+    if (!web3auth) {
+      console.error("web3auth not initialized yet");
+      return;
+    }
+    const web3authProvider = await web3auth.connect();
+    setProvider(web3authProvider);
+  };
+
+  const unloggedInView = (
     <div id="signin" className="screen">
       <header id="signin--header">
         <div id="signin--illustration"></div>
@@ -18,23 +28,19 @@ function SignIn() {
         </h1>
       </header>
       <div id="signin--main">
-        <div className="signin--main-title">
-          Login
-          <br />
-          With
-        </div>
-        <nav className="signin--buttons">
-          <Link to="/pool">
-            <span className="signin--btn signin--btn-facebook"></span>
-          </Link>
-          <Link to="/pool">
-            <span className="signin--btn signin--btn-google"></span>
-          </Link>
+        <nav className="signin--buttons-2">
+          <button onClick={login}>
+            <span className="signin--btn signin--btn-generic">Join</span>
+          </button>
         </nav>
       </div>
       <footer id="signin--footer"></footer>
     </div>
   );
+
+  const loggedInView = <Redirect to="/home" />;
+
+  return provider ? loggedInView : unloggedInView;
 }
 
 export default SignIn;
