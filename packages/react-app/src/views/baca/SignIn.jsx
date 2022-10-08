@@ -6,9 +6,8 @@ import "./SignIn.css";
  * Sign in screen.
  * @returns react component
  **/
-function SignIn({ web3auth, provider, setProvider }) {
+function SignIn({ web3auth, provider, setProvider, redirectPath }) {
   const login = async () => {
-    console.log("click");
     if (!web3auth) {
       console.error("web3auth not initialized yet");
       return;
@@ -38,7 +37,7 @@ function SignIn({ web3auth, provider, setProvider }) {
     </div>
   );
 
-  const loggedInView = <Redirect to="/home" />;
+  const loggedInView = <Redirect to={redirectPath} />;
 
   return provider ? loggedInView : unloggedInView;
 }

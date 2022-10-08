@@ -65,7 +65,14 @@ function App(props) {
     if (provider && username) {
       return View;
     } else {
-      return <SignIn web3auth={web3auth} provider={provider} setProvider={setProvider} />;
+      return (
+        <SignIn
+          web3auth={web3auth}
+          provider={provider}
+          setProvider={setProvider}
+          redirectPath={history.location.pathname}
+        />
+      );
     }
   };
 
