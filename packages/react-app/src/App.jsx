@@ -1,7 +1,7 @@
 import "antd/dist/antd.css";
 import React, { useEffect, useState } from "react";
 import { Web3Auth } from "@web3auth/web3auth";
-import { CHAIN_NAMESPACES } from "@web3auth/base";
+import { CHAIN_NAMESPACES, WALLET_ADAPTERS } from "@web3auth/base";
 import { Redirect, Route, Switch, useHistory } from "react-router-dom";
 import { SignIn, Home, Pool, Invitation, Contribution, New, Confirmation } from "./views";
 import { CLIENT_ID, MUMBAI_CHAIN_ID, ALCHEMY_KEY } from "./constants";
@@ -37,7 +37,25 @@ function App(props) {
 
         setWeb3auth(web3auth);
 
-        await web3auth.initModal();
+        await web3auth.initModal({
+          modalConfig: {
+            [WALLET_ADAPTERS.OPENLOGIN]: {
+              label: "openlogin",
+              loginMethods: {
+                email_passwordless: {
+                  showOnModal: false,
+                },
+                external_wallet: {
+                  showOnModal: false,
+                },
+              },
+            },
+            [WALLET_ADAPTERS.WALLET_CONNECT_V1]: {
+              label: "wallet_connect_v1",
+              showOnModal: false,
+            },
+          },
+        });
         if (web3auth.provider) {
           setProvider(web3auth.provider);
           setUserInfo(await getUserInfo());
