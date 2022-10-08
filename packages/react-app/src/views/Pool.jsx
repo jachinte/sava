@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
-import { getPoolData } from "../helpers";
 import "./Pool.css";
+import poolContract from "../hooks/poolContract";
 
 /**
  * Pool screen.
@@ -9,7 +9,16 @@ import "./Pool.css";
  **/
 function Pool() {
   const { id } = useParams();
-  const data = getPoolData(id);
+  const [contract, setContract] = useState();
+  const [data, setData] = useState();
+
+  useEffect(() => {
+    async function fetchData() {
+      data = await poolContract.getPool(contract, id); // this does not work ;(
+    }
+    fetchData();
+  }, []);
+
   const balance = data.participants.map(p => p.contribution).reduce((sum, elem) => sum + elem, 0);
   const individualGoal = data.goal / data.participants.length;
   const formatter = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 2 });
