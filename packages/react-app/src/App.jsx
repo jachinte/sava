@@ -2,7 +2,6 @@ import "antd/dist/antd.css";
 import { useBalance } from "eth-hooks";
 import React, { useState } from "react";
 import { Route, Switch } from "react-router-dom";
-import { ThemeSwitch } from "./components";
 import { NETWORKS } from "./constants";
 import { SignIn, Pool } from "./views";
 import { useStaticJsonRPC } from "./hooks";
@@ -30,7 +29,7 @@ function App(props) {
           <Pool yourLocalBalance={yourLocalBalance} />
         </Route>
       </Switch>
-      <ThemeSwitch />
+      {/* <ThemeSwitch /> */}
     </div>
   );
 }

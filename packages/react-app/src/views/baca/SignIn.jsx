@@ -12,7 +12,7 @@ function SignIn({ yourLocalBalance }) {
     <div id="signin" className="screen">
       <header id="signin--header">
         <div id="signin--illustration"></div>
-        <h1>You're invited to participate in a Baca with Maria.</h1>
+        <h1>You're invited to join a savings group with Maria.</h1>
       </header>
       <div id="signin--main">
         <div className="signin--main-title">
