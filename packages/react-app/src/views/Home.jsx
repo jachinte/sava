@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Web3 from "web3";
-import contracts from "../../contracts/external_contracts";
-import RPC from "../../hooks/web3RPC";
-import poolContract from "../../hooks/poolContract";
+import contracts from "../contracts/external_contracts";
+import RPC from "../hooks/web3RPC";
+import poolContract from "../hooks/poolContract";
 import "./Home.css";
 
 const pools = [
