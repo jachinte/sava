@@ -2,6 +2,10 @@
 
 pragma solidity >=0.7.0 <0.9.0;
 
+import "@openzeppelin-contracts/token/ERC20/IERC20.sol";
+import "@aave-protocol/interfaces/IPool.sol";
+
+
 contract YourContract {
 
     struct SavingPool {
@@ -28,6 +32,10 @@ contract YourContract {
 
     //Saving Pool Global Counter
     uint256 public autoincrementSavingPoolIndex; 
+
+    address public supplyTokenAddress = 0x001B3B4d0F3714Ca98ba10F6042DaEbF0B1B7b6F; // Mumbai Aave DAI
+    address public aavePoolAddress = 0x6C9fB0D5bD9429eb9Cd96B85B81d872281771E6B; // Mumbai Aave Pool Address
+
 
 
     constructor () payable {
@@ -121,6 +129,18 @@ contract YourContract {
         require(block.timestamp >= currentSavingPool.endDate);
 
         currentSavingPool.poolState = SavingPoolState.CLOSED;
+    }
+
+    function supplyToYieldProvider(uint amount) public returns (bool) {
+
+        //1. Approve Aave pool to access amount from this contract 
+        IERC20(supplyTokenAddress).approve(aavePoolAddress, amount);
+
+        // 2. Supply amount to Aave pool
+        IPool(aavePoolAddress).supply(supplyTokenAddress, amountToDrain, address(this), 0);
+
+        return true;
+
     }
 
     /**
