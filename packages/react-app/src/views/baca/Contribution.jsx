@@ -18,7 +18,10 @@ function Contribution() {
     <div id="contribution" className="screen">
       <header id="screen--header">
         <div id="screen--illustration"></div>
-        <Link to={`/pool/${id}`}>Go back.</Link>
+        <div className="title-bar">
+          <Link to={`/pool/${id}`} id="goback-btn"></Link>
+          <h4>Contribute to your goal</h4>
+        </div>
       </header>
       <div id="screen--main">
         <div>

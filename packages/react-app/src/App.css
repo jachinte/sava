@@ -26,6 +26,30 @@ html, body {
     width: 100%;
 }
 
+#logout-btn,
+#goback-btn {
+  background-size: contain;
+  border: none;
+  cursor: pointer;
+  display: inline-block;
+  height: 32px;
+  width: 32px;
+}
+
+#logout-btn {
+  background: url(./assets/logout.svg) no-repeat center center;
+  position: absolute;
+  right: 32px;
+  top: 32px;
+}
+
+#goback-btn {
+  background: url(./assets/go-back.svg) no-repeat center center;
+  margin-right: 20px;
+  height: 32px;
+  width: 32px;
+}
+
 .screen {
     align-items: center;
     background-image: url("./assets/bg-wave.svg");
@@ -44,20 +68,20 @@ html, body {
 .screen h4,
 .screen h5,
 .screen h6 {
-  display: block;
+  vertical-align: baseline;
   width: 100%;
 }
 
 .screen h1 {
-  font-size: 3em;
+  font-size: 2.8em;
   font-weight: bolder;
-  line-height: 1.1em;
+  line-height: 1.2em;
 }
 
 .screen h2 {
-  font-size: 3em;
+  font-size: 2.8em;
   font-weight: bold;
-  line-height: 1.1em;
+  line-height: 1.2em;
 }
 
 .screen h3 {
@@ -87,6 +111,13 @@ html, body {
   box-sizing: border-box;
   font-size: 1.5em;
   padding: 10px 20px;
+  width: 100%;
+}
+
+.screen .title-bar {
+  align-items: center;
+  display: flex;
+  justify-content: start;
   width: 100%;
 }
 

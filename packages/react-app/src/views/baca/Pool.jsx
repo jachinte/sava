@@ -39,7 +39,10 @@ function Pool() {
     <div id="pool" className="screen">
       <header id="screen--header">
         <div id="screen--illustration"></div>
-        <Link to={`/home`}>Go back.</Link>
+        <div className="title-bar">
+          <Link to={`/home`} id="goback-btn"></Link>
+          <h4>{data.name}</h4>
+        </div>
       </header>
       <div id="screen--main">
         <div>

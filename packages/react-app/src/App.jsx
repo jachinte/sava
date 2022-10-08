@@ -73,23 +73,26 @@ function App(props) {
   };
 
   return (
-    <div id="app">
-      <Switch>
-        <Route exact path="/">
-          {auth(<Redirect to="/home" />)}
-        </Route>
-        <Route exact path="/join">
-          <Invitation author={"Maria"} />
-        </Route>
-        <Route exact path="/home">
-          {auth(<Home username={userInfo?.name} provider={provider} logout={logout} />)}
-        </Route>
-        <Route path="/new">{auth(<New />)}</Route>
-        <Route path="/pool/:id">{auth(<Pool />)}</Route>
-        <Route path="/contribution/pool/:id">{auth(<Contribution />)}</Route>
-        <Route path="/confirmation/:pool/:amount">{auth(<Confirmation />)}</Route>
-      </Switch>
-    </div>
+    <>
+      {history.location.pathname !== "/" && <button onClick={logout} id="logout-btn" />}
+      <div id="app">
+        <Switch>
+          <Route exact path="/">
+            {auth(<Redirect to="/home" />)}
+          </Route>
+          <Route exact path="/join">
+            <Invitation author={"Maria"} />
+          </Route>
+          <Route exact path="/home">
+            {auth(<Home provider={provider} userInfo={userInfo} />)}
+          </Route>
+          <Route path="/new">{auth(<New />)}</Route>
+          <Route path="/pool/:id">{auth(<Pool />)}</Route>
+          <Route path="/contribution/pool/:id">{auth(<Contribution />)}</Route>
+          <Route path="/confirmation/:pool/:amount">{auth(<Confirmation />)}</Route>
+        </Switch>
+      </div>
+    </>
   );
 }
 
