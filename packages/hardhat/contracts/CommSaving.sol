@@ -8,6 +8,7 @@ contract CommSaving {
 
     struct SavingPool {
         uint256 savingPoolId;
+        string name;
         SavingPoolState poolState; //the pool state
         uint256 individualGoal; //the individual goal
         uint256 startDate; // the pool start date
@@ -34,6 +35,7 @@ contract CommSaving {
 
     constructor () payable {
         SavingPool storage firstSavingPool = savingPools.push();
+        firstSavingPool.name = "Road to Devcon Bogota";
         firstSavingPool.savingPoolId = 0;
         firstSavingPool.poolState = SavingPoolState.OPEN;
         firstSavingPool.individualGoal = 100;
@@ -45,6 +47,29 @@ contract CommSaving {
         firstSavingPool.winner = address(0);
 
         autoincrementSavingPoolIndex = 1; 
+    }
+
+    /**
+    *@dev Create a saving pool with given name, individualGoal, startDate and endDate
+    *@param name the saving pool name
+    *@param individualGoal the individual savings goal
+    *@param startDate the savings pool startDate
+    *@param endDate the savings pool endDate
+    */
+    function createSavingPool(string calldata name, uint256 individualGoal, uint256 startDate, uint256 endDate) public{
+        SavingPool storage newSavingPool = savingPools.push();
+        newSavingPool.name = name;
+        newSavingPool.savingPoolId = autoincrementSavingPoolIndex;
+        newSavingPool.poolState = SavingPoolState.OPEN;
+        newSavingPool.individualGoal = individualGoal;
+        newSavingPool.startDate = startDate;
+        newSavingPool.endDate = endDate;
+        newSavingPool.currentSavings = 0;
+        newSavingPool.savingsRewards = 0;
+        newSavingPool.winnerSelected = false;
+        newSavingPool.winner = address(0);
+
+        autoincrementSavingPoolIndex++;
     }
 
     /**
