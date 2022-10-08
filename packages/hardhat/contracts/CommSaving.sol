@@ -14,15 +14,21 @@ contract CommSaving {
         uint256 endDate; // the pool end date
         uint256 currentSavings; //current savings
         uint256 savingsRewards; //total savings rewards
+        uint256 claimedSavingsAmount; //total of claimed saivings
         mapping(address => uint256) contributions; //map of contributions in the saving pool per contributor
-        uint256 numberOfContributors;
+        mapping(address => bool) claimings; //map of claimings in the saving pool per contributor. True if it was claimed, false otherwise.
+        uint256 numberOfContributors; //number of contributors in the pool
+        bool winnerSelected; //flag to determine if the saving pool has a winner or not
+        address winner; //winner of the rewards pool
 
     }
 
     enum SavingPoolState {OPEN, CLOSED}
 
+    //Saving pools array
     SavingPool[] public savingPools;
 
+    //Saving Pool Global Counter
     uint256 public autoincrementSavingPoolIndex; 
 
 
@@ -31,14 +37,20 @@ contract CommSaving {
         firstSavingPool.savingPoolId = 0;
         firstSavingPool.poolState = SavingPoolState.OPEN;
         firstSavingPool.individualGoal = 100;
-        firstSavingPool.startDate = 1646627707000;
-        firstSavingPool.endDate = 1678163707000;
+        firstSavingPool.startDate = 1665125434;
+        firstSavingPool.endDate = 1678171834;
         firstSavingPool.currentSavings = 0;
         firstSavingPool.savingsRewards = 0;
+        firstSavingPool.winnerSelected = false;
+        firstSavingPool.winner = address(0);
 
         autoincrementSavingPoolIndex = 1; 
     }
 
+    /**
+    *@dev Contribute to a saving pool
+    *@param savingPoolId the saving pool index
+    */
     function contributeToSavingPool(uint savingPoolId) public payable {
 
         //Saving pool should be greater than 0
@@ -50,8 +62,8 @@ contract CommSaving {
         require(currentSavingPool.poolState == SavingPoolState.OPEN, "The saving pool is not open");
 
         //Date validations
-        //require(block.timestamp >= currentSavingPool.startDate, "User cannot contribute before the start date");
-        //require(block.timestamp <= currentSavingPool.endDate, "User cannot contribute after the end date");
+        require(block.timestamp >= currentSavingPool.startDate, "User cannot contribute before the start date");
+        require(block.timestamp <= currentSavingPool.endDate, "User cannot contribute after the end date");
 
         //Get current contribution for user
         uint256 getCurrentContributionForUser = currentSavingPool.contributions[msg.sender];
@@ -64,11 +76,69 @@ contract CommSaving {
             currentSavingPool.numberOfContributors++;
         }
         currentSavingPool.contributions[msg.sender] += msg.value;
+
+        //Determine if this transaction makes the user a winner of the rewards pool
+        if(currentSavingPool.winnerSelected == false && getMaximumAllowedContributionPerUserInPool(savingPoolId, msg.sender) == 0){
+            currentSavingPool.winnerSelected = true;
+            currentSavingPool.winner = msg.sender;
+        }
         
         //Update total savings
         currentSavingPool.currentSavings += msg.value;
 
     }   
+
+    /**
+    *@dev Close a saving pool
+    *@param savingPoolId the saving pool index
+    */
+    function closeSavingPool(uint savingPoolId) public {
+        SavingPool storage currentSavingPool = savingPools[savingPoolId];
+
+        require(currentSavingPool.poolState == SavingPoolState.OPEN, "The saving pool should be open");
+        require(block.timestamp >= currentSavingPool.endDate);
+
+        currentSavingPool.poolState = SavingPoolState.CLOSED;
+    }
+
+    /**
+    *@dev Claim user savings
+    *@param savingPoolId the saving pool index
+    */
+    function claimSavings(uint savingPoolId) public payable {
+        SavingPool storage currentSavingPool = savingPools[savingPoolId];
+        address payable user = payable(msg.sender);
+
+        //Get claimable savings amout for user
+        uint256 claimableSavings = getClaimableSavingsAmountPerUserInPool(savingPoolId, user);
+
+        //Change claiming state to true
+        currentSavingPool.claimings[user] = true;
+
+        //Transfer claimable savings to user
+        user.transfer(claimableSavings);
+
+        //Update total savings claimed
+        currentSavingPool.claimedSavingsAmount += claimableSavings;
+    }
+
+    /**
+    *@dev Get claimable savings amount per user in a pool
+    *@param savingPoolId the saving pool index
+    */
+    function getClaimableSavingsAmountPerUserInPool(uint savingPoolId, address user) public view returns(uint256) {
+        require(savingPools[savingPoolId].poolState == SavingPoolState.CLOSED, "The saving pool should be closed");
+        require(savingPools[savingPoolId].claimings[user] == false, "User has claimed his savings before");
+
+        uint256 claimableSavings = getUserContributionInSavingsPool(savingPoolId, user);
+        
+        //Add rewards if current user is the winner
+        if(savingPools[savingPoolId].winner == user){
+            claimableSavings += savingPools[savingPoolId].savingsRewards;
+        }
+
+        return claimableSavings;
+    }
 
     /**
     *@dev Get user contribution in savings pool
