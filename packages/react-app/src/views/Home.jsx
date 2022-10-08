@@ -58,7 +58,7 @@ function PoolItem({ data }) {
     </span>
   );
   const openButton = (
-    <Link to={`/pool/${data.id}`}>
+    <Link to={`/pool/${data["0"]}`}>
       <span className="btn btn-lg btn-blue">Enter pool</span>
     </Link>
   );

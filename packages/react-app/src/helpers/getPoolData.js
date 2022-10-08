@@ -1,7 +1,7 @@
 export function getPoolData(id) {
   return {
-    1: {
-      id: 1,
+    0: {
+      id: 0,
       name: "Trip to Cartagena!",
       goal: 1000,
       rewards: 14.121,
@@ -20,8 +20,8 @@ export function getPoolData(id) {
         },
       ],
     },
-    2: {
-      id: 2,
+    1: {
+      id: 1,
       name: "Trip to Canada!",
       goal: 1000,
       rewards: 12.34,
@@ -42,7 +42,7 @@ export function getPoolData(id) {
         },
       ],
     },
-    3: {
+    2: {
       id: 2,
       name: "Metallica concert in Rio",
       goal: 650,

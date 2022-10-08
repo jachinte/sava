@@ -11,6 +11,10 @@ const poolContract = (() => {
     return rpools;
   };
 
+  const getPool = async (contract, index) => {
+    return await contract.methods.savingPools(index).call();
+  };
+
   const getContributorsFromPool = async (contract, index) => {
     const response = await contract.methods.getContributorsInPool(index).call();
     return response;
@@ -18,6 +22,7 @@ const poolContract = (() => {
 
   return {
     getUserPools,
+    getPool,
     getContributorsFromPool,
   };
 })();
