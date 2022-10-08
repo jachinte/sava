@@ -20,19 +20,6 @@ const SAVINGSABI = [
         type: "uint256",
       },
     ],
-    name: "closeSavingPool",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "savingPoolId",
-        type: "uint256",
-      },
-    ],
     name: "contributeToSavingPool",
     outputs: [],
     stateMutability: "payable",
@@ -116,6 +103,25 @@ const SAVINGSABI = [
         internalType: "uint256",
         name: "",
         type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "savingPoolId",
+        type: "uint256",
+      },
+    ],
+    name: "getContributorsInPool",
+    outputs: [
+      {
+        internalType: "address[]",
+        name: "",
+        type: "address[]",
       },
     ],
     stateMutability: "view",
@@ -328,11 +334,6 @@ const SAVINGSABI = [
         type: "string",
       },
       {
-        internalType: "enum YourContract.SavingPoolState",
-        name: "poolState",
-        type: "uint8",
-      },
-      {
         internalType: "uint256",
         name: "individualGoal",
         type: "uint256",
@@ -395,7 +396,7 @@ module.exports = {
   1: {
     contracts: {
       SavingsPool: {
-        address: "0xb71E540cfd717Ec720C2c0577cCEBc83F9ADA384",
+        address: "0x347d8DFc9F9E174fAD886fCB1D977D8bff51f2a0",
         abi: SAVINGSABI,
       },
     },
