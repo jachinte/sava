@@ -11,7 +11,7 @@ function App(props) {
   const history = useHistory();
   const [web3auth, setWeb3auth] = useState();
   const [provider, setProvider] = useState();
-  const [username, setUsername] = useState();
+  const [userInfo, setUserInfo] = useState();
 
   const getUserInfo = async () => {
     if (web3auth) {
@@ -40,8 +40,7 @@ function App(props) {
         await web3auth.initModal();
         if (web3auth.provider) {
           setProvider(web3auth.provider);
-          const userInfo = await getUserInfo();
-          setUsername(userInfo.name);
+          setUserInfo(await getUserInfo());
         }
       } catch (error) {
         console.error(error);
@@ -49,18 +48,18 @@ function App(props) {
     };
 
     init();
-  }, [provider]);
+  }, [!provider]);
 
   const logout = async () => {
     if (web3auth) {
       await web3auth.logout();
-      setProvider(null);
+      setProvider(undefined);
       history.push("/");
     }
   };
 
   const auth = View => {
-    if (provider && username) {
+    if (provider && userInfo) {
       return View;
     }
     return (
@@ -83,7 +82,7 @@ function App(props) {
           <Invitation author={"Maria"} />
         </Route>
         <Route exact path="/home">
-          {auth(<Home username={username} provider={provider} logout={logout} />)}
+          {auth(<Home username={userInfo?.name} provider={provider} logout={logout} />)}
         </Route>
         <Route path="/new">{auth(<New />)}</Route>
         <Route path="/pool/:id">{auth(<Pool />)}</Route>
