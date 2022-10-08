@@ -79,10 +79,10 @@ function PoolItem({ data }) {
           <h5 className="uppercase">Pool participants ({data.participants.length})</h5>
           <ul className="screen--user-list">
             {data.participants.map(participant => (
-              <li ket={participant.username}>
-                <img alt={participant.username} src={participant.avatar} />
+              <li ket={participant}>
+                <img alt={participant} src="/images/leon.png" />
                 <span className="uppercase">
-                  <b>{participant.username}</b>
+                  <b>{participant}</b>
                 </span>
               </li>
             ))}
@@ -120,7 +120,14 @@ function Home({ provider, userInfo }) {
   useEffect(() => {
     async function fetchData() {
       if (contract) {
-        setUserPools(await poolContract.getUserPools(contract, address));
+        let rpools = await poolContract.getUserPools(contract, address);
+        rpools = await Promise.all(
+          rpools.map(async p => {
+            p.participants = await poolContract.getContributorsFromPool(contract, p["0"]);
+            return p;
+          }),
+        );
+        setUserPools(rpools);
       }
     }
     fetchData();
