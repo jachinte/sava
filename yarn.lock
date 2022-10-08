@@ -5367,9 +5367,9 @@ abort-controller@^3.0.0:
     event-target-shim "^5.0.0"
 
 abortcontroller-polyfill@^1.7.3:
-  version "1.7.3"
-  resolved "https://registry.yarnpkg.com/abortcontroller-polyfill/-/abortcontroller-polyfill-1.7.3.tgz#1b5b487bd6436b5b764fd52a612509702c3144b5"
-  integrity sha512-zetDJxd89y3X99Kvo4qFx8GKlt6GsvN3UcRZHwU6iFA/0KiOmhkTVhe8oRoTBiTVPZu09x3vCra47+w8Yz1+2Q==
+  version "1.7.5"
+  resolved "https://registry.yarnpkg.com/abortcontroller-polyfill/-/abortcontroller-polyfill-1.7.5.tgz#6738495f4e901fbb57b6c0611d0c75f76c485bed"
+  integrity sha512-JMJ5soJWP18htbbxJjG7bG6yuI6pRhgJ0scHHTfkUjf6wjP912xZWvM+A4sJK3gqd9E8fcPbDnOefbA9Th/FIQ==
 
 abstract-level@^1.0.0, abstract-level@^1.0.2, abstract-level@^1.0.3:
   version "1.0.3"
@@ -23807,7 +23807,7 @@ web3@1.7.4:
     web3-shh "1.7.4"
     web3-utils "1.7.4"
 
-web3@^1.7.0:
+web3@^1.8.0:
   version "1.8.0"
   resolved "https://registry.yarnpkg.com/web3/-/web3-1.8.0.tgz#3ca5f0b32de6a1f626407740411219035b5fde64"
   integrity sha512-sldr9stK/SALSJTgI/8qpnDuBJNMGjVR84hJ+AcdQ+MLBGLMGsCDNubCoyO6qgk1/Y9SQ7ignegOI/7BPLoiDA==

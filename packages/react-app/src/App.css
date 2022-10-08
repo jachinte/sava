@@ -1,0 +1,166 @@
+html {
+    width: 100%;
+    height: 100%;
+    display: table;
+}
+
+body {
+    width: 100%;
+    display: table-cell;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+}
+
+#app {
+  align-items: stretch;
+  display: flex;
+  font-size: larger;
+  justify-content: center;
+}
+
+#root, #app, .screen {
+    height: 100%;
+    width: 100%;
+}
+
+.screen {
+    align-items: center;
+    background-image: url("./assets/bg-wave.svg");
+    background-repeat: no-repeat;
+    background-position: center bottom;
+    background-size: contain;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 40px;
+}
+
+.screen h1,
+.screen h2,
+.screen h3,
+.screen h4,
+.screen h5,
+.screen h6 {
+  display: block;
+  width: 100%;
+}
+
+.screen h1 {
+  font-size: 3em;
+  font-weight: bolder;
+  line-height: 1.1em;
+}
+
+.screen h2 {
+  font-size: 3em;
+  font-weight: bold;
+  line-height: 1.1em;
+}
+
+.screen h3 {
+  color: #B4B4B4;
+  font-size: 1.8em;
+  font-weight: bold;
+}
+
+.screen h4 {
+  font-size: 1.6em;
+  font-weight: bold;
+  margin: 0;
+  padding: 0;
+}
+
+.screen h5 {
+  color: #585858;
+  font-size: 0.9em;
+  font-weight: bold;
+}
+
+.screen .text-light {
+  font-weight: 300;
+}
+
+.screen .green-text {
+  color: #34A853;
+}
+
+.screen .uppercase {
+  text-transform: uppercase;
+}
+
+.screen .btn-group {
+  align-items: center;
+  display: flex;
+  gap: 10px;
+}
+
+.screen .btn {
+  border-radius: 5px;
+  text-align: center;
+}
+
+.screen .btn-lg {
+  display: block;
+  font-size: 1.5em;
+  font-weight: bold;
+  padding: 15px;
+  width: 100%;
+}
+
+.screen .btn-blue {
+  background: #0B6EFE;
+  color: white;
+}
+
+.screen--user-list {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.screen--user-list li {
+  align-items: center;
+  display: flex;
+  justify-content: start;
+  gap: 10px;
+  padding: 5px 0;
+}
+
+.screen--user-list img {
+  border-radius: 100%;
+}
+
+#screen--header {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    width: 100%;
+}
+
+#screen--illustration {
+    background-image: url("./assets/door-guy.svg");
+    background-repeat: no-repeat;
+    background-position: center top;
+    background-size: contain;
+    min-height: 100px;
+    max-height: 150px;
+}
+
+#screen--main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+#screen--title {
+    text-align: center;
+}
+
+#screen--footer {
+  width: 100%;
+}

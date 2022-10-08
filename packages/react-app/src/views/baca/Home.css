@@ -1,0 +1,30 @@
+.pool-item {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-bottom: 50px;
+  width: 100%;
+}
+
+.btn-add {
+  border-radius: 100%;
+  display: inline-block;
+  font-size: 3em;
+  height: 75px;
+  line-height: 1.3;
+  text-align: center;
+  width: 75px;
+}
+
+#footer-btn {
+  display: flex;
+  justify-content: right;
+  margin-top: 40px;
+  width: 100%;
+}
+
+#footer-btn .btn-label {
+  font-size: 1.4em;
+  font-weight: bold;
+  color: black;
+}

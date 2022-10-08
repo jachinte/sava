@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, useParams } from "react-router-dom";
-import "./Pool.css";
+import "./Contribution.css";
 
 function getPoolData(id) {
   return {
@@ -26,49 +26,39 @@ function getPoolData(id) {
 }
 
 /**
- * Pool screen.
+ * Contribution screen.
  * @returns react component
  **/
-function Pool() {
+function Contribution() {
   const { id } = useParams();
+  const username = "leon"; // TODO Get this from the session
   const data = getPoolData(id);
   const balance = data.participants.map(p => p.contribution).reduce((sum, elem) => sum + elem, 0);
   const individualGoal = data.goal / data.participants.length;
+  const maximumAllowed = individualGoal - balance;
   const formatter = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 2 });
   return (
-    <div id="pool" className="screen">
+    <div id="contribution" className="screen">
       <header id="screen--header">
         <div id="screen--illustration"></div>
-        <Link to={`/home`}>Go back.</Link>
+        <Link to={`/pool/${id}`}>Go back.</Link>
       </header>
       <div id="screen--main">
         <div>
-          <h3>Pool status and goal</h3>
-          <h4>
-            <b>{formatter.format(balance)}</b> <span className="text-light">of {formatter.format(data.goal)}</span>
-          </h4>
+          <h3>Enter a contribution</h3>
         </div>
         <div>
-          <h3>Savings rewards</h3>
-          <h4>
-            <b className="green-text">{formatter.format(data.rewards)}</b>
-          </h4>
-          <p className="green-text">First to complete contribution wins the rewards.</p>
+          <h5 className="uppercase">Maximum allowed</h5>
+          <span>{formatter.format(maximumAllowed)}</span>
         </div>
-        <hr />
-        <h5 className="uppercase">Pool Participants ({data.participants.length})</h5>
-        {data.participants.map(participant => (
-          <div key={participant.username}>
-            <h3>{participant.username}'s contribution</h3>
-            <h4 className="text-light">
-              {formatter.format(participant.contribution)} / {formatter.format(individualGoal)}
-            </h4>
-          </div>
-        ))}
+        <div>
+          <h5 className="uppercase">Current contribution</h5>
+          <span>{formatter.format(balance)}</span>
+        </div>
       </div>
       <footer id="screen--footer">
-        <Link to={`/contribution/pool/${id}`}>
-          <span className="btn btn-lg btn-blue">Complete Contribution</span>
+        <Link to="/">
+          <span className="btn btn-lg btn-blue">Make Contribution</span>
         </Link>
         <h4>31 days left</h4>
       </footer>
@@ -76,4 +66,4 @@ function Pool() {
   );
 }
 
-export default Pool;
+export default Contribution;

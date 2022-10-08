@@ -1,0 +1,30 @@
+#pool hr {
+  border-color: #efefef;
+  width: 100%;
+}
+
+#pool #screen--footer {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  gap: 10px;
+}
+
+#pool #screen--footer h4 {
+  color: #585858;
+}
+
+#pool #screen--main {
+  align-items: flex-start;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  gap: 15px;
+  width: 100%;
+}
+
+#pool #screen--main * {
+  margin: 0;
+  padding: 0;
+  line-height: 1.3;
+}

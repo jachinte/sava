@@ -2,19 +2,56 @@ import "antd/dist/antd.css";
 import React, { useEffect, useState } from "react";
 import { Web3Auth } from "@web3auth/web3auth";
 import { CHAIN_NAMESPACES } from "@web3auth/base";
-import { useBalance } from "eth-hooks";
 import { Route, Switch } from "react-router-dom";
-import "./App.css";
-import { ThemeSwitch } from "./components";
-import { NETWORKS } from "./constants";
-import { SignIn, Pool } from "./views";
-import { useStaticJsonRPC } from "./hooks";
+import { SignIn, Home, Pool, Invitation, Contribution } from "./views";
 import RPC from "./hooks/web3RPC";
+import "./App.css";
 
 const clientId = "BFt8f0zCLJtfThnpTEsmOs8EdgHgmIkKsObguZbdp7XEEwheU4BCDH8shgSBQ3l-UVTKV0qqrLIEnsXSYe35kpE"; // get from https://dashboard.web3auth.io
 
-/// 📡 What chain are your contracts deployed to?
-const initialNetwork = NETWORKS.localhost; // Select your target frontend network (localhost, goerli, xdai, mainnet)
+const pools = [
+  {
+    id: 1,
+    name: "Trip to Cartagena!",
+    goal: 1000,
+    currency: "USDC",
+    days: 31,
+    winnerSelected: false,
+    participants: [
+      {
+        username: "Leon",
+        avatar: "/images/leon.png",
+        contribution: 410,
+      },
+      {
+        username: "Jose",
+        avatar: "/images/jose.png",
+        contribution: 101,
+      },
+    ],
+  },
+  {
+    id: 2,
+    name: "Trip to Canada!",
+    goal: 1000,
+    currency: "USDC",
+    days: 31,
+    winnerSelected: true,
+    winner: "Jose",
+    participants: [
+      {
+        username: "Leon",
+        avatar: "/images/leon.png",
+        contribution: 410,
+      },
+      {
+        username: "Jose",
+        avatar: "/images/jose.png",
+        contribution: 101,
+      },
+    ],
+  },
+];
 
 function App(props) {
   const [web3auth, setWeb3auth] = useState();
@@ -27,8 +64,10 @@ function App(props) {
           clientId,
           chainConfig: {
             chainNamespace: CHAIN_NAMESPACES.EIP155,
-            chainId: "0x13881", // polygon mumbai chain-id in hex
-            rpcTarget: "https://polygon-mumbai.g.alchemy.com/v2/RGPhWsJCplbShwpSYOo1Df7oplSaTl8d", // This is the public RPC we have added, please pass on your own endpoint while creating an app
+            // polygon mumbai chain-id in hex
+            chainId: "0x13881",
+            // This is the public RPC we have added, please pass on your own endpoint while creating an app
+            rpcTarget: "https://polygon-mumbai.g.alchemy.com/v2/RGPhWsJCplbShwpSYOo1Df7oplSaTl8d",
           },
         });
 
@@ -169,16 +208,20 @@ function App(props) {
   );
 
   return (
-    <div className="App">
+    <div id="app">
       <Switch>
         <Route exact path="/">
-          <div className="grid">{provider ? loggedInView : unloggedInView}</div>
+          <SignIn />
         </Route>
-        <Route exact path="/pool">
-          <div className="grid">{provider ? <Pool yourLocalBalance={yourLocalBalance} /> : unloggedInView}</div>
+        <Route exact path="/join">
+          <Invitation author={"Maria"} />
         </Route>
+        <Route exact path="/home">
+          {provider ? <Home username="Jose" pools={pools} /> : unloggedInView}
+        </Route>
+        <Route path="/pool/:id">{provider ? <Pool /> : unloggedInView}</Route>
+        <Route path="/contribution/pool/:id">{provider ? <Contribution /> : unloggedInView}</Route>
       </Switch>
-      <ThemeSwitch />
     </div>
   );
 }
