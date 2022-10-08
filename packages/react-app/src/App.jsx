@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Web3Auth } from "@web3auth/web3auth";
 import { CHAIN_NAMESPACES } from "@web3auth/base";
 import { Route, Switch } from "react-router-dom";
-import { SignIn, Home, Pool, Invitation, Contribution, New } from "./views";
+import { SignIn, Home, Pool, Invitation, Contribution, New, Confirmation } from "./views";
 import { CLIENT_ID, MUMBAI_CHAIN_ID, ALCHEMY_KEY } from "./constants";
 import RPC from "./hooks/web3RPC";
 import "./App.css";
@@ -173,6 +173,7 @@ function App(props) {
         <Route path="/new">{provider ? <New /> : unloggedInView}</Route>
         <Route path="/pool/:id">{provider ? <Pool /> : unloggedInView}</Route>
         <Route path="/contribution/pool/:id">{provider ? <Contribution /> : unloggedInView}</Route>
+        <Route path="/confirmation/:pool/:amount">{provider ? <Confirmation /> : unloggedInView}</Route>
       </Switch>
     </div>
   );
