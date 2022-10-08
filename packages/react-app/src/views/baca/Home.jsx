@@ -100,7 +100,7 @@ function PoolItem({ data }) {
  * Home screen.
  * @returns react component
  **/
-function Home({ username, provider, logout }) {
+function Home({ provider, userInfo }) {
   const [address, setAddress] = useState();
   const [contract, setContract] = useState();
   const [userPools, setUserPools] = useState();
@@ -130,8 +130,7 @@ function Home({ username, provider, logout }) {
     <div id="home" className="screen">
       <header id="screen--header">
         <div id="screen--illustration"></div>
-        <h1 id="screen--title">Welcome back, {username}!</h1>
-        <button onClick={logout}>logout</button>
+        <h1 id="screen--title">Welcome back, {userInfo.name.split(" ")[0]}!</h1>
       </header>
       <div id="screen--main">
         <h3>Your existing pools</h3>
