@@ -13,7 +13,7 @@ function Invitation({ author }) {
     <div id="signin" className="screen">
       <header id="signin--header">
         <div id="signin--illustration"></div>
-        <h1>You're invited to join a savings group with {author}.</h1>
+        <h1 id="invitation-title">You're invited to join a savings group with {author}.</h1>
       </header>
       <div id="signin--main">
         <div className="signin--main-title">

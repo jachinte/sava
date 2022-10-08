@@ -1,15 +1,18 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 /**
  * Pool screen.
- * @param {*} yourLocalBalance balance on current network
  * @returns react component
  **/
-function Pool({ yourLocalBalance }) {
+function Pool() {
+  let { id } = useParams();
   return (
     <div className="screen">
-      <Link to="/">Go to back to the sign in screen.</Link>
+      <div>
+        <h1>Pool No. {id}</h1>
+        <Link to="/home">Go to back to the home screen.</Link>
+      </div>
     </div>
   );
 }

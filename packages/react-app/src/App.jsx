@@ -1,24 +1,28 @@
 import "antd/dist/antd.css";
-import { useBalance } from "eth-hooks";
-import React, { useState } from "react";
 import { Route, Switch } from "react-router-dom";
-import { NETWORKS } from "./constants";
-import { SignIn, Pool, Invitation } from "./views";
-import { useStaticJsonRPC } from "./hooks";
+import { SignIn, Home, Pool, Invitation } from "./views";
 import "./App.css";
 
-/// 📡 What chain are your contracts deployed to?
-const initialNetwork = NETWORKS.localhost; // Select your target frontend network (localhost, goerli, xdai, mainnet)
-
 function App(props) {
-  const networkOptions = [initialNetwork.name, "mainnet", "goerli"];
-  const [address] = useState();
-  const [selectedNetwork] = useState(networkOptions[0]);
-  const targetNetwork = NETWORKS[selectedNetwork];
-  const localProvider = useStaticJsonRPC([
-    process.env.REACT_APP_PROVIDER ? process.env.REACT_APP_PROVIDER : targetNetwork.rpcUrl,
-  ]);
-  const yourLocalBalance = useBalance(localProvider, address);
+  const pools = [
+    {
+      id: 1,
+      name: "Trip to Cartagena!",
+      goal: 1000,
+      currency: "USDC",
+      days: 31,
+      participants: [
+        {
+          username: "Leon",
+          avatar: "/images/leon.png",
+        },
+        {
+          username: "Jose",
+          avatar: "/images/jose.png",
+        },
+      ],
+    },
+  ];
   return (
     <div id="app">
       <Switch>
@@ -28,8 +32,11 @@ function App(props) {
         <Route exact path="/join">
           <Invitation author={"Maria"} />
         </Route>
-        <Route exact path="/pool">
-          <Pool yourLocalBalance={yourLocalBalance} />
+        <Route exact path="/home">
+          <Home username="Jose" pools={pools} />
+        </Route>
+        <Route path="/pool/:id">
+          <Pool />
         </Route>
       </Switch>
       {/* <ThemeSwitch /> */}
