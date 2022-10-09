@@ -74,7 +74,7 @@ Prerequisites: [Node (v16 LTS)](https://nodejs.org/en/download/) plus [Yarn](htt
 > clone/fork:
 
 ```bash
-git clone https://github.com/nerzhul250/comm-savings
+git clone https://github.com/jachinte/sava
 ```
 
 > install and start your frontend:
