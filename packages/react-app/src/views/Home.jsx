@@ -54,7 +54,7 @@ function PoolItem({ data }) {
  * Home screen.
  * @returns react component
  **/
-function Home({ address, contract, userInfo }) {
+function Home({ address, contract }) {
   const [userPools, setUserPools] = useState();
 
   useEffect(() => {
@@ -77,7 +77,7 @@ function Home({ address, contract, userInfo }) {
     <div id="home" className="screen">
       <header id="screen--header">
         <div id="screen--illustration"></div>
-        <h1 id="screen--title">Welcome back, {address}!</h1>
+        <h1 id="screen--title">Welcome back, {addressAsName(address)}!</h1>
       </header>
       <div id="screen--main">
         {userPools && userPools.length > 0 ? (
