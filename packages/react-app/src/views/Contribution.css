@@ -1,0 +1,16 @@
+#contribution #screen--main {
+  align-items: flex-start;
+  gap: 30px;
+  width: 100%;
+}
+
+#contribution #screen--footer {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  gap: 10px;
+}
+
+#contribution #screen--footer h4 {
+  color: #585858;
+}

@@ -1,4 +1,241 @@
-.App {
+#app {
+  align-items: stretch;
+  display: flex;
+  font-size: larger;
+  justify-content: center;
+}
+
+#root, #app, .screen {
+    height: 100%;
+    width: 100%;
+}
+
+#logout-btn,
+#goback-btn,
+#invite-btn {
+  background-size: contain;
+  border: none;
+  cursor: pointer;
+  display: inline-block;
+  height: 32px;
+  width: 32px;
+}
+
+#logout-btn {
+  background: url(./assets/logout.svg) no-repeat center center;
+  position: absolute;
+  right: 32px;
+  top: 32px;
+}
+
+#goback-btn {
+  background: url(./assets/go-back.svg) no-repeat center center;
+  margin-right: 20px;
+  height: 32px;
+  width: 32px;
+}
+
+#invite-btn {
+  background: url(./assets/people.svg) no-repeat center center;
+  margin-right: 10px;
+  height: 32px;
+  width: 32px;
+}
+
+.screen {
+    align-items: center;
+    background-image: url("./assets/bg-wave.svg");
+    background-repeat: no-repeat;
+    background-position: center bottom;
+    background-size: contain;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 30px;
+    overflow-y: auto;
+    padding: 40px;
+}
+
+.screen h1,
+.screen h2,
+.screen h3,
+.screen h4,
+.screen h5,
+.screen h6 {
+  vertical-align: baseline;
+  width: 100%;
+}
+
+.screen h1 {
+  font-size: 2.8em;
+  font-weight: bolder;
+  line-height: 1.2em;
+}
+
+.screen h2 {
+  font-size: 2.5em;
+  font-weight: bold;
+  line-height: 1.2em;
+}
+
+.screen h3 {
+  color: #B4B4B4;
+  font-size: 1.8em;
+  font-weight: bold;
+}
+
+.screen h4 {
+  font-size: 1.6em;
+  font-weight: bold;
+  margin: 0;
+  padding: 0;
+}
+
+.screen h5 {
+  color: #585858;
+  font-size: 0.9em;
+  font-weight: bold;
+}
+
+.screen input[type="number"],
+.screen input[type="text"],
+.screen input[type="date"],
+.screen input[type="datetime-local"] {
+  background: #efefef;
+  border-color: transparent;
+  border-radius: 5px;
+  box-sizing: border-box;
+  font-size: 1.5em;
+  padding: 10px 20px;
+  width: 100%;
+}
+
+.screen--empty-state {
+  background: url("./assets/no-data.svg") no-repeat center center;
+  background-size: contain;
+  height: 180px;
+  margin: 30px;
+  opacity: 0.6;
+  width: 100%;
+}
+
+.screen .title-bar {
+  align-items: center;
+  display: flex;
+  justify-content: start;
+  width: 100%;
+}
+
+.screen .text-light {
+  font-weight: 300;
+}
+
+.screen .text-center {
   text-align: center;
-  padding-left: calc(100vw - 100%);
+}
+
+.screen .green-text {
+  color: #34A853;
+}
+
+.screen .uppercase {
+  text-transform: uppercase;
+}
+
+.screen .btn-group {
+  align-items: center;
+  display: flex;
+  gap: 10px;
+}
+
+.screen .btn {
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  text-align: center;
+}
+
+.screen .btn:active,
+.screen .btn:focus {
+  outline: #eee;
+}
+
+.screen .btn[disabled],
+.screen .btn-disabled {
+  background: #ccc;
+  color: #999;
+  cursor: default;
+}
+
+.screen .btn-lg {
+  display: block;
+  font-size: 1.5em;
+  font-weight: bold;
+  padding: 15px;
+  width: 100%;
+}
+
+.screen .btn-blue {
+  background: #0B6EFE;
+  color: white;
+}
+
+.screen .btn-green {
+  background: #00b475;
+  color: white;
+}
+
+.screen--user-list {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.screen--user-list li {
+  align-items: center;
+  display: flex;
+  justify-content: start;
+  gap: 10px;
+  padding: 5px 0;
+}
+
+.screen--user-list img {
+  border-radius: 100%;
+}
+
+#screen--header {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    width: 100%;
+}
+
+#screen--illustration {
+    background-image: url("./assets/door-guy.svg");
+    background-repeat: no-repeat;
+    background-position: center top;
+    background-size: contain;
+    min-height: 100px;
+    max-height: 150px;
+}
+
+#screen--main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    width: 100%;
+}
+
+#screen--main div {
+  width: 100%;
+}
+
+#screen--title {
+    text-align: center;
+}
+
+#screen--footer {
+  width: 100%;
 }

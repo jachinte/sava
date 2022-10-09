@@ -1,0 +1,126 @@
+#signin {
+    align-items: center;
+    background-image: url("../assets/bg-wave.svg");
+    background-repeat: no-repeat;
+    background-position: center bottom;
+    background-size: contain;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 40px;
+}
+
+#signin--header {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    width: 100%;
+}
+
+#signin--illustration {
+    background-image: url("../assets/door-guy.svg");
+    background-repeat: no-repeat;
+    background-position: center top;
+    background-size: contain;
+    min-height: 140px;
+    max-height: 220px;
+}
+
+#signin--app-name {
+  background-image: url("../assets/sava.svg");
+    background-repeat: no-repeat;
+    background-position: center top;
+    background-size: contain;
+    min-height: 100px;
+    max-height: 120px;
+}
+
+#signin--subheading {
+  color: #AAA;
+  font-size: 2em;
+  font-weight: 500;
+}
+
+#signin--main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 40px;
+    width: 100%;
+}
+
+.signin--main-title {
+    background-image: url("../assets/divider.svg");
+    background-repeat: no-repeat;
+    background-position: center center;
+    text-align: center;
+    font-size: 2em;
+    line-height: 1.2em;
+    width: 100%;
+}
+
+body[data-theme="light"] .signin--main-title {
+    color: #666;
+}
+
+body[data-theme="dark"] .signin--main-title {
+    color: #bbb;
+}
+
+.signin--buttons {
+  display: flex;
+  flex-direction: row;
+  gap: 30px;
+}
+
+.signin--buttons-2 {
+  background-image: url("../assets/divider.svg");
+  background-repeat: no-repeat;
+  background-position: center center;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 30px;
+  width: 100%;
+}
+
+.signin--buttons-2 button {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.signin--btn {
+    border-radius: 100%;
+    display: block;
+    height: 120px;
+    width: 120px;
+}
+
+.signin--btn-facebook {
+    background-image: url("../assets/facebook-btn.svg");
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+}
+
+.signin--btn-google {
+    background-image: url("../assets/google-btn.svg");
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+}
+
+.signin--btn-generic {
+  background: #1977F3;
+  color: white;
+  font-size: 1.8em;
+  font-weight: bolder;
+  line-height: 4;
+  text-align: center;
+}
+
+#signin--footer {
+    min-height: 150px;
+}
