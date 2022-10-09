@@ -2,11 +2,25 @@
 
 > Descentralized Collaborative Savings Platform For Latin America
 
-Problem: 60% of Latin Americans don't save at all. 
+**Problem**: 60% of Latin Americans don't save at all. 
 
 There are 600 million Latin Americans. Per Capita GDP in Latam is $8,093 USD.
 
 So, 360 million Latin Americans don't save, which means almost $2.9 trillion USD is not saved at all.
+
+**Solution**: We created a descentralized application that allows any person to save money collaboratively by creating a savings pool and inviting friends to join.
+
+Sava is running #onPolygon in the Mumbai testnet.
+
+We used @Web3Auth to facilitate the onboarding because we're targeting people who are not very familiar with crypto at this time. 
+
+Thanks to Web3Auth we allow users to join a pool even by signing up with Google, Facebook and email.
+
+Users can create a savings pool by specifying a name, a savings goal that all pool users are aiming for, and a target date to achieve it.
+
+A friend can join a pool by sending money to it. Then they will share the same savings pool and will share the savings goal. 
+
+We strongly believe that adding a social component to savings efforts will encourage people to save more.
 
 ## Addendum for Polygon Bounty in relation to ETHBogota 2022.
 
