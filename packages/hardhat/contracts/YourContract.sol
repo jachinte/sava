@@ -2,6 +2,28 @@
 
 pragma solidity >=0.8.0 <0.9.0;
 
+interface AddressesProvider {
+    function getPool()
+    external
+    view
+    returns (address);
+}
+
+interface WETHGateway {
+    function depositETH(address lendingPool, address onBehalfOf, uint16 referralCode)
+    external
+    payable;
+    
+    function withdrawETH(address lendingPool, uint256 amount, address to)
+    external;
+}
+
+interface AToken {
+  function balanceOf(address _user) external view returns (uint256);
+  function approve(address spender, uint256 amount) external returns (bool);
+  function transfer(address receiver, uint256 amount) external returns (bool);
+}
+
 contract YourContract {
 
     struct SavingPool {
@@ -29,9 +51,15 @@ contract YourContract {
 
     address public supplyTokenAddress = 0x0000000000000000000000000000000000001010; // Mumbai Aave MATIC
     address public aavePoolAddress = 0x6C9fB0D5bD9429eb9Cd96B85B81d872281771E6B; // Mumbai Aave Pool Address
+    address public lendingPoolAddressProvider;
+    address public wETHGateway;
+    address public wETHToken;
 
-
-    constructor () payable {
+    constructor (
+        address _lendingPoolAddressProvider,
+        address _wETHGateway,
+        address _wETHToken
+    ) payable {
         SavingPool storage firstSavingPool = savingPools.push();
         firstSavingPool.name = "Road to Devcon Bogota";
         firstSavingPool.savingPoolId = 0;
@@ -43,7 +71,10 @@ contract YourContract {
         firstSavingPool.winnerSelected = false;
         firstSavingPool.winner = address(0);
 
-        autoincrementSavingPoolIndex = 1; 
+        autoincrementSavingPoolIndex = 1;
+        lendingPoolAddressProvider = _lendingPoolAddressProvider;
+        wETHGateway = _wETHGateway;
+        wETHToken = _wETHToken;
     }
 
     /**
@@ -53,7 +84,7 @@ contract YourContract {
     *@param startDate the savings pool startDate
     *@param endDate the savings pool endDate
     */
-    function createSavingPool(string calldata name, uint256 individualGoal, uint256 startDate, uint256 endDate) public{
+    function createSavingPool(string calldata name, uint256 individualGoal, uint256 startDate, uint256 endDate) public returns (uint256){
         SavingPool storage newSavingPool = savingPools.push();
         newSavingPool.name = name;
         newSavingPool.savingPoolId = autoincrementSavingPoolIndex;
@@ -66,6 +97,8 @@ contract YourContract {
         newSavingPool.winner = address(0);
 
         autoincrementSavingPoolIndex++;
+
+        return newSavingPool.savingPoolId;
     }
 
     /**
@@ -107,6 +140,10 @@ contract YourContract {
         //Update total savings
         currentSavingPool.currentSavings += msg.value;
 
+        //Deposit savings to aave
+        address lendingPool = AddressesProvider(lendingPoolAddressProvider).getPool();
+        WETHGateway(wETHGateway).depositETH{value:msg.value}(lendingPool, address(this), 0);
+
     }   
 
 
@@ -143,8 +180,10 @@ contract YourContract {
         //Change claiming state to true
         currentSavingPool.claimings[user] = true;
 
-        //Transfer claimable savings to user
-        user.transfer(claimableSavings);
+        //Withdraw claimable savings from aave
+        address lendingPool = AddressesProvider(lendingPoolAddressProvider).getPool();
+        require(AToken(wETHToken).approve(wETHGateway,claimableSavings), "aToken approval failed");
+        WETHGateway(wETHGateway).withdrawETH(lendingPool,claimableSavings,user);
 
         //Update total savings claimed
         //currentSavingPool.claimedSavingsAmount += claimableSavings;
@@ -161,7 +200,7 @@ contract YourContract {
         
         //Add rewards if current user is the winner
         if(savingPools[savingPoolId].winner == user){
-            claimableSavings += savingPools[savingPoolId].savingsRewards;
+            claimableSavings += getSavingsRewards(savingPoolId);
         }
 
         return claimableSavings;
@@ -208,15 +247,31 @@ contract YourContract {
     }
 
 
+    function getTotalSavings() public view returns(uint256) {
+
+        uint256 totalSavings = 0;
+
+        for(uint i = 0; i < savingPools.length; i++){
+            SavingPool storage currentSavingPool = savingPools[i];
+            totalSavings = totalSavings + currentSavingPool.currentSavings;
+        }
+
+        return totalSavings;
+    }
+
     /**
     *@dev Get savings rewards in a pool
     *@param savingPoolId the saving pool index
     */
     function getSavingsRewards(uint savingPoolId) public view returns(uint256) {
-        //Get saving pool
+
+        uint256 totalSavings = getTotalSavings();
+        uint256 wETHTokenBalance = AToken(wETHToken).balanceOf(address(this));
+        uint256 totalSavingsRewards = wETHTokenBalance - totalSavings;
         SavingPool storage currentSavingPool = savingPools[savingPoolId];
+        uint256 savingsRewards = (totalSavingsRewards*currentSavingPool.currentSavings)/totalSavings;
         
-        return currentSavingPool.savingsRewards;
+        return savingsRewards;
     }
     
     /**
