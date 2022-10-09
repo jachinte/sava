@@ -53,7 +53,7 @@ contract YourContract {
     *@param startDate the savings pool startDate
     *@param endDate the savings pool endDate
     */
-    function createSavingPool(string calldata name, uint256 individualGoal, uint256 startDate, uint256 endDate) public{
+    function createSavingPool(string calldata name, uint256 individualGoal, uint256 startDate, uint256 endDate) public returns (uint256){
         SavingPool storage newSavingPool = savingPools.push();
         newSavingPool.name = name;
         newSavingPool.savingPoolId = autoincrementSavingPoolIndex;
@@ -66,6 +66,8 @@ contract YourContract {
         newSavingPool.winner = address(0);
 
         autoincrementSavingPoolIndex++;
+
+        return newSavingPool.savingPoolId;
     }
 
     /**
