@@ -31,8 +31,9 @@ function Invitation({ contract, address }) {
     if (contract) {
       setButtonDisabled(true);
       setButtonText("Processing...");
-      await poolContract.contributeToSavingPool(contract, pool, address, BigNumber.from(`${ethToWei(amount)}`));
-      history.push(`/confirmation/${pool}/${amount}`);
+      const ethAmount = ethToWei(amount);
+      await poolContract.contributeToSavingPool(contract, pool, address, BigNumber.from(`${ethAmount}`));
+      history.push(`/confirmation/${pool}/${ethAmount}`);
     }
   };
 
