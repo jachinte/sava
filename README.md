@@ -45,7 +45,7 @@ This project is designed as a public good, not to earn a profit. It's core goal 
 
 We have taken screenshots of Sava's features and store them in the `screenshots` directory. Here is a preview:
 
-<img src="./screenshots/preview.png" height="420" />
+<img src="./screenshots/preview.png" height="540" />
 
 ## Running Sava locally
 
