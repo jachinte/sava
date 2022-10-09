@@ -34,7 +34,7 @@ function PoolItem({ data }) {
           <ul className="screen--user-list">
             {data.participants.map(participant => (
               <li ket={participant}>
-                <img alt={participant} src="/images/leon.png" />
+                <img alt={participant} src="/images/avatar.jpg" />
                 <span className="uppercase">
                   <b>{addressAsName(participant)}</b>
                 </span>
@@ -77,7 +77,7 @@ function Home({ address, contract, userInfo }) {
     <div id="home" className="screen">
       <header id="screen--header">
         <div id="screen--illustration"></div>
-        <h1 id="screen--title">Welcome back, {userInfo.name.split(" ")[0]}!</h1>
+        <h1 id="screen--title">Welcome back, {address}!</h1>
       </header>
       <div id="screen--main">
         {userPools && userPools.length > 0 ? (
