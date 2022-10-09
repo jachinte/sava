@@ -55,6 +55,11 @@ We are using Web3Auth. It is integral to the mission of making the onboarding ex
 #### ETH Foundation
 This project is designed as a public good, not to earn a profit. It's core goal is to engage communities to save together through gamification and network effects – where the more participants the more rewards there are.
 
+## Read about Sava on Twitter
+
+What we built and why we built it on Polygon: https://twitter.com/csacanam/status/1579036129285656576
+<img src="./screenshots/tweet.png" height="420" />
+
 ## Screenshots
 
 We have taken screenshots of Sava's features and stored them in the `screenshots` directory. Here is a preview:
