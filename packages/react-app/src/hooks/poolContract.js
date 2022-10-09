@@ -1,4 +1,8 @@
 const poolContract = (() => {
+  const getClaimableSavingsAmountPerUserInPool = async (contract, index, address) => {
+    return await contract.methods.getClaimableSavingsAmountPerUserInPool(index, address).call();
+  };
+
   const claimSavings = async (contract, index, address) => {
     return await contract.methods.claimSavings(index).send({ from: address });
   };
@@ -50,6 +54,7 @@ const poolContract = (() => {
     getContributorsFromPool,
     getCurrentContributionPerUserInPool,
     getMaximumAllowedContributionPerUserInPool,
+    getClaimableSavingsAmountPerUserInPool,
   };
 })();
 

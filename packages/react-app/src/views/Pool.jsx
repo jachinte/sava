@@ -15,6 +15,7 @@ function Pool({ contract, address }) {
 
   const [data, setData] = useState();
   const [contributions, setContributions] = useState([]);
+  const [claimableAmount, setClaimableAmount] = useState(0);
   const [savingsCompleted, setSavingsCompleted] = useState(false);
   const [poolEnded, setPoolEnded] = useState(false);
 
@@ -32,6 +33,7 @@ function Pool({ contract, address }) {
         }),
       );
       setContributions(usersData);
+      setClaimableAmount(await poolContract.getClaimableSavingsAmountPerUserInPool(contract, id, address));
     }
     fetchData();
   }, [contract, address, !data]);
@@ -52,7 +54,7 @@ function Pool({ contract, address }) {
       setButtonDisabled(true);
       setButtonText("Processing...");
       await poolContract.claimSavings(contract, id, address);
-      setButtonText("You claimed your savings");
+      setButtonText("Savings deposited");
     }
   };
 
@@ -84,13 +86,17 @@ function Pool({ contract, address }) {
           <h4>
             <b className="green-text">{formatter.format(data?.savingsRewards)}</b>
           </h4>
-          {data?.winnerSelected ? (
+          {data?.winnerSelected && data?.winner === address && (
+            <p className="green-text">
+              <b>You</b> won the reward for fulfilling your commitment first.
+            </p>
+          )}
+          {data?.winnerSelected && data?.winner !== address && (
             <p className="green-text">
               <b>{addressAsName(data?.winner)}</b> has won the reward for fulfilling his commitment first.
             </p>
-          ) : (
-            <p className="green-text">First to complete contribution wins the rewards.</p>
           )}
+          {!data?.winnerSelected && <p className="green-text">First to complete contribution wins the rewards.</p>}
         </div>
         <hr />
         <h5 className="uppercase">Pool Participants ({data?.numberOfContributors})</h5>
@@ -115,9 +121,14 @@ function Pool({ contract, address }) {
             <span className="btn btn-lg btn-blue">Contribute to this pool</span>
           </Link>
         )}
-        {poolEnded && (
+        {poolEnded && claimableAmount > 0 && (
           <button onClick={claimSavings} disabled={buttonDisabled} className="btn btn-lg btn-green">
             {buttonText}
+          </button>
+        )}
+        {poolEnded && claimableAmount === 0 && (
+          <button disabled={true} className="btn btn-lg btn-disabled">
+            Savings deposited
           </button>
         )}
         <h4>{poolEnded ? "The pool has ended." : daysLeftStr(data?.startDate, data?.endDate)}</h4>
