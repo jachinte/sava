@@ -18,7 +18,7 @@ Thanks to Web3Auth we allow users to join a pool even by signing up with Google,
 
 Users can create a savings pool by specifying a name, a savings goal that all pool users are aiming for, and a target date to achieve it.
 
-A friend can join a pool by sending money to it. Then they will share the same savings pool and will share the savings goal. 
+A friend can join a pool by sending money to it. Then, they will share the same savings pool and will share the savings goal. 
 
 We strongly believe that adding a social component to savings efforts will encourage people to save more.
 
