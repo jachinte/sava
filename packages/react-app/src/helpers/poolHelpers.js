@@ -3,7 +3,7 @@ export function daysLeft(startDate, endDate) {
 }
 
 export function daysLeftStr(startDate, endDate) {
-  const days = Math.max(Math.round((endDate - startDate) / (24 * 3600)), 0);
+  const days = daysLeft(startDate, endDate);
   const s = days === 1 ? "" : "s";
   return `${days} day${s} left`;
 }

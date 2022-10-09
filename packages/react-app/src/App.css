@@ -99,7 +99,8 @@
 
 .screen input[type="number"],
 .screen input[type="text"],
-.screen input[type="date"] {
+.screen input[type="date"],
+.screen input[type="datetime-local"] {
   background: #efefef;
   border-color: transparent;
   border-radius: 5px;

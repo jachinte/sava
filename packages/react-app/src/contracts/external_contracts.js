@@ -1,5 +1,29 @@
 const SAVINGSABI = [
   {
+    inputs: [],
+    stateMutability: "payable",
+    type: "constructor",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "bool",
+        name: "success",
+        type: "bool",
+      },
+      {
+        indexed: false,
+        internalType: "bytes",
+        name: "data",
+        type: "bytes",
+      },
+    ],
+    name: "ClaimResponse",
+    type: "event",
+  },
+  {
     inputs: [
       {
         internalType: "uint256",
@@ -49,32 +73,8 @@ const SAVINGSABI = [
       },
     ],
     name: "createSavingPool",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
+    outputs: [],
     stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [],
-    stateMutability: "payable",
-    type: "constructor",
-  },
-  {
-    inputs: [],
-    name: "aavePoolAddress",
-    outputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-    ],
-    stateMutability: "view",
     type: "function",
   },
   {
@@ -185,6 +185,25 @@ const SAVINGSABI = [
       },
     ],
     name: "getIndividualGoalInPool",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "user",
+        type: "address",
+      },
+    ],
+    name: "getLastPoolIndexPerCreator",
     outputs: [
       {
         internalType: "uint256",
@@ -322,6 +341,30 @@ const SAVINGSABI = [
   {
     inputs: [
       {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    name: "poolsPerCreator",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
         internalType: "uint256",
         name: "",
         type: "uint256",
@@ -383,26 +426,13 @@ const SAVINGSABI = [
     stateMutability: "view",
     type: "function",
   },
-  {
-    inputs: [],
-    name: "supplyTokenAddress",
-    outputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
 ];
 
 module.exports = {
   1: {
     contracts: {
       SavingsPool: {
-        address: "0xFE3F8b945454b106202775bfFE9688Fb9C0A2d77",
+        address: "0x8a6EC9Ed07eD0355E57b9f1537E66E81E74d78d4",
         abi: SAVINGSABI,
       },
     },

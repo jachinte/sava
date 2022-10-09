@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
+import Web3 from "web3";
 import { poolContract } from "../hooks";
 import "./Contribution.css";
 
@@ -20,10 +21,9 @@ function New({ contract, address }) {
     if (contract) {
       setButtonDisabled(true);
       setButtonText("Processing...");
-      const endDate = new Date(date).getTime();
-      const response = await poolContract.createSavingPool(contract, address, name, individualGoal, endDate);
-      console.log("response", response);
-      const id = 0;
+      const endDate = Math.floor(new Date(date).getTime() / 1000.0);
+      await poolContract.createSavingPool(contract, address, name, individualGoal, endDate);
+      const id = await poolContract.getLastPoolIndexPerCreator(contract, address);
       history.push(`/join/pool/${id}`);
     }
   };
@@ -48,7 +48,7 @@ function New({ contract, address }) {
         </div>
         <div>
           <h3>Target date</h3>
-          <input type="date" value={date} onChange={e => setDate(e.target.value)} />
+          <input type="datetime-local" value={date} onChange={e => setDate(e.target.value)} />
         </div>
       </div>
       <footer id="screen--footer">

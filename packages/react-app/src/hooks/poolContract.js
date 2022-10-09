@@ -1,4 +1,8 @@
 const poolContract = (() => {
+  const getLastPoolIndexPerCreator = async (contract, address) => {
+    return await contract.methods.getLastPoolIndexPerCreator(address).call();
+  };
+
   const getClaimableSavingsAmountPerUserInPool = async (contract, index, address) => {
     return await contract.methods.getClaimableSavingsAmountPerUserInPool(index, address).call();
   };
@@ -8,7 +12,7 @@ const poolContract = (() => {
   };
 
   const createSavingPool = async (contract, address, name, individualGoal, endDate) => {
-    const startDate = new Date().getTime();
+    const startDate = Math.floor(new Date().getTime() / 1000.0);
     return await contract.methods.createSavingPool(name, individualGoal, startDate, endDate).send({ from: address });
   };
 
@@ -46,6 +50,7 @@ const poolContract = (() => {
   };
 
   return {
+    getLastPoolIndexPerCreator,
     claimSavings,
     createSavingPool,
     contributeToSavingPool,
