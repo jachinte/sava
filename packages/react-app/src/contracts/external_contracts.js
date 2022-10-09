@@ -432,7 +432,7 @@ module.exports = {
   1: {
     contracts: {
       SavingsPool: {
-        address: "0x8a6EC9Ed07eD0355E57b9f1537E66E81E74d78d4",
+        address: "0x23aEbE528C2ef0C269418d72F5F344B13cA74DED",
         abi: SAVINGSABI,
       },
     },
