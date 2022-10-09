@@ -20,8 +20,10 @@ function Pool({ contract, address }) {
   //   fetchData();
   // }, []);
 
-  const [data, setData] = useState();
-  const [contributions, setContributions] = useState();
+  const [data, setData] = useState({});
+  const [contributions, setContributions] = useState([]);
+  const [savingsCompleted, setSavingsCompleted] = useState(false);
+  const [poolEnded, setPoolEnded] = useState(false);
 
   useEffect(() => {
     async function fetchData() {
@@ -37,6 +39,17 @@ function Pool({ contract, address }) {
     }
     fetchData();
   }, [!data]);
+
+  useEffect(() => {
+    let completed = false;
+    contributions.forEach(contribution => {
+      if (contribution.address === address) {
+        completed = contribution.value === data?.individualGoal;
+      }
+    });
+    setSavingsCompleted(completed);
+    setPoolEnded(new Date() > new Date(data?.endDate * 1000));
+  }, [address, data, contributions]);
 
   const formatter = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 2 });
 
@@ -68,8 +81,7 @@ function Pool({ contract, address }) {
           </h4>
           {data?.winnerSelected ? (
             <p className="green-text">
-              <span className="green-text">{addressAsName(data?.winner)}</span> has won the reward for fulfilling his
-              commitment first.
+              <b>{addressAsName(data?.winner)}</b> has won the reward for fulfilling his commitment first.
             </p>
           ) : (
             <p className="green-text">First to complete contribution wins the rewards.</p>
@@ -92,10 +104,19 @@ function Pool({ contract, address }) {
         ))}
       </div>
       <footer id="screen--footer">
-        <Link to={`/contribution/pool/${id}`}>
-          <span className="btn btn-lg btn-blue">Contribute to this pool</span>
-        </Link>
-        <h4>{daysLeft(data?.startDate, data?.endDate)} days left</h4>
+        {!poolEnded && savingsCompleted ? (
+          <span className="btn btn-lg btn-disabled">You made it!</span>
+        ) : (
+          <Link to={`/contribution/pool/${id}`}>
+            <span className="btn btn-lg btn-blue">Contribute to this pool</span>
+          </Link>
+        )}
+        {poolEnded && (
+          <Link to={`/claim/pool/${id}`}>
+            <span className="btn btn-lg btn-green">Claim your funds</span>
+          </Link>
+        )}
+        <h4>{poolEnded ? "The pool has ended." : `${daysLeft(data?.startDate, data?.endDate)} days left`}</h4>
       </footer>
     </div>
   );

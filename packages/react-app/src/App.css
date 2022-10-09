@@ -155,7 +155,8 @@
   outline: #eee;
 }
 
-.screen .btn[disabled] {
+.screen .btn[disabled],
+.screen .btn-disabled {
   background: #ccc;
   color: #999;
   cursor: default;

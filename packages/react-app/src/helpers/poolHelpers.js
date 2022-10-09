@@ -1,5 +1,5 @@
 export function daysLeft(startDate, endDate) {
-  return Math.round((endDate - startDate) / (24 * 3600));
+  return Math.max(Math.round((endDate - startDate) / (24 * 3600)), 0);
 }
 
 export function addressAsName(address, chars = 5) {

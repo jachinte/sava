@@ -4,18 +4,8 @@ import { poolContract } from "../hooks";
 import { addressAsName, daysLeft } from "../helpers";
 import "./Home.css";
 
-function PoolItem({ data }) {
+function PoolItem({ data, address }) {
   const formatter = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 2 });
-  const winnerSpan = (
-    <span className="green-text">
-      This savings pool has ended. <b>{data.winner}</b> has won the reward for fulfilling his commitment first.
-    </span>
-  );
-  const openButton = (
-    <Link to={`/pool/${data["0"]}`}>
-      <span className="btn btn-lg btn-blue">Enter pool</span>
-    </Link>
-  );
   return (
     <div className="pool-item">
       <header>
@@ -35,8 +25,9 @@ function PoolItem({ data }) {
             {data.participants.map(participant => (
               <li ket={participant}>
                 <img alt={participant} src="/images/avatar.jpg" />
-                <span className="uppercase">
-                  <b>{addressAsName(participant)}</b>
+                <span>
+                  <b className="uppercase">{addressAsName(participant)}</b>
+                  {address === participant ? " (me)" : ""}
                 </span>
               </li>
             ))}
@@ -45,7 +36,14 @@ function PoolItem({ data }) {
       ) : (
         <div></div>
       )}
-      {data.winnerSelected ? winnerSpan : openButton}
+      {data.winnerSelected && (
+        <span className="green-text">
+          <b>{addressAsName(data.winner)}</b> has won the reward for fulfilling his commitment first.
+        </span>
+      )}
+      <Link to={`/pool/${data["0"]}`}>
+        <span className="btn btn-lg btn-blue">Enter pool</span>
+      </Link>
     </div>
   );
 }
@@ -84,7 +82,7 @@ function Home({ address, contract }) {
           <>
             <h3>Your existing pools</h3>
             {userPools.map(pool => (
-              <PoolItem key={pool["0"]} data={pool} />
+              <PoolItem key={pool["0"]} data={pool} address={address} />
             ))}
           </>
         ) : (
