@@ -1,6 +1,12 @@
 # Sava
 
-> Descentralized Collaborative Savings For Latin America
+> Descentralized Collaborative Savings Platform For Latin America
+
+Problem: 60% of Latin Americans don't save at all. 
+
+There are 600 million Latin Americans. Per Capita GDP in Latam is $8,093 USD.
+
+So, 360 million Latin Americans don't save, which means almost $2.9 trillion USD is not saved at all.
 
 ## Addendum for Polygon Bounty in relation to ETHBogota 2022.
 
@@ -35,7 +41,13 @@ We are using Web3Auth. It is integral to the mission of making the onboarding ex
 #### ETH Foundation
 This project is designed as a public good, not to earn a profit. It's core goal is to engage communities to save together through gamification and network effects – where the more participants the more rewards there are.
 
-# Quick Start
+## Screenshots
+
+We have taken screenshots of Sava's features and store them in the `screenshots` directory. Here is a preview:
+
+<img src="./screenshots/preview.png" height="720" />
+
+## Running Sava locally
 
 Prerequisites: [Node (v16 LTS)](https://nodejs.org/en/download/) plus [Yarn](https://classic.yarnpkg.com/en/docs/install/) and [Git](https://git-scm.com/downloads)
 
