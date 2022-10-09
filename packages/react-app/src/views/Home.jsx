@@ -1,54 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import Web3 from "web3";
-import contracts from "../contracts/external_contracts";
-import RPC from "../hooks/web3RPC";
-import poolContract from "../hooks/poolContract";
+import { poolContract } from "../hooks";
+import { addressAsName } from "../helpers";
 import "./Home.css";
-
-const pools = [
-  {
-    id: 1,
-    name: "Trip to Cartagena!",
-    goal: 1000,
-    currency: "USDC",
-    days: 31,
-    winnerSelected: false,
-    participants: [
-      {
-        username: "Leon",
-        avatar: "/images/leon.png",
-        contribution: 410,
-      },
-      {
-        username: "Jose",
-        avatar: "/images/jose.png",
-        contribution: 101,
-      },
-    ],
-  },
-  {
-    id: 2,
-    name: "Trip to Canada!",
-    goal: 1000,
-    currency: "USDC",
-    days: 31,
-    winnerSelected: true,
-    winner: "Jose",
-    participants: [
-      {
-        username: "Leon",
-        avatar: "/images/leon.png",
-        contribution: 410,
-      },
-      {
-        username: "Jose",
-        avatar: "/images/jose.png",
-        contribution: 101,
-      },
-    ],
-  },
-];
 
 function PoolItem({ data }) {
   const formatter = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 2 });
@@ -82,7 +36,7 @@ function PoolItem({ data }) {
               <li ket={participant}>
                 <img alt={participant} src="/images/leon.png" />
                 <span className="uppercase">
-                  <b>{participant}</b>
+                  <b>{addressAsName(participant)}</b>
                 </span>
               </li>
             ))}
@@ -100,22 +54,8 @@ function PoolItem({ data }) {
  * Home screen.
  * @returns react component
  **/
-function Home({ provider, userInfo }) {
-  const [address, setAddress] = useState();
-  const [contract, setContract] = useState();
+function Home({ address, contract, userInfo }) {
   const [userPools, setUserPools] = useState();
-
-  useEffect(() => {
-    async function fetchData() {
-      if (provider) {
-        setAddress(await RPC.getAccounts(provider));
-        const web3 = new Web3(provider);
-        const SavingsPool = contracts[1].contracts.SavingsPool;
-        setContract(new web3.eth.Contract(SavingsPool.abi, SavingsPool.address));
-      }
-    }
-    fetchData();
-  }, [provider]);
 
   useEffect(() => {
     async function fetchData() {

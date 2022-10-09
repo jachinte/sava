@@ -1,57 +1,73 @@
 import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import "./Pool.css";
-import poolContract from "../hooks/poolContract";
+import { fromContractDataToAppData } from "../helpers";
+import { poolContract } from "../hooks";
 
 /**
  * Pool screen.
  * @returns react component
  **/
-function Pool() {
+function Pool({ contract }) {
   const { id } = useParams();
-  const [contract, setContract] = useState();
+  // const data = getPoolData(id);
+
+  // const [key, setKey] = useState();
+  // useEffect(() => {
+  //   async function fetchData() {
+  //     setKey(await web3RPC.getPrivateKey(provider));
+  //   }
+  //   fetchData();
+  // }, []);
+
   const [data, setData] = useState();
+  const [attrs, setAttrs] = useState();
 
   useEffect(() => {
     async function fetchData() {
-      data = await poolContract.getPool(contract, id); // this does not work ;(
+      setData(fromContractDataToAppData(await poolContract.getPool(contract, id)));
+      if (data) {
+        setAttrs({
+          balance: data?.participants?.map(p => p.contribution).reduce((sum, elem) => sum + elem, 0),
+        });
+      }
     }
     fetchData();
-  }, []);
+  }, [!data]);
 
-  const balance = data.participants.map(p => p.contribution).reduce((sum, elem) => sum + elem, 0);
-  const individualGoal = data.goal / data.participants.length;
   const formatter = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 2 });
+
   return (
     <div id="pool" className="screen">
       <header id="screen--header">
         <div id="screen--illustration"></div>
         <div className="title-bar">
           <Link to={`/home`} id="goback-btn"></Link>
-          <h4>{data.name}</h4>
+          <h4>{data?.name}</h4>
         </div>
       </header>
       <div id="screen--main">
         <div>
           <h3>Pool status and goal</h3>
           <h4>
-            <b>{formatter.format(balance)}</b> <span className="text-light">of {formatter.format(data.goal)}</span>
+            <b>{formatter.format(attrs?.balance)}</b>{" "}
+            <span className="text-light">of {formatter.format(data?.individualGoal * data?.numberOfContributors)}</span>
           </h4>
         </div>
         <div>
           <h3>Savings rewards</h3>
           <h4>
-            <b className="green-text">{formatter.format(data.rewards)}</b>
+            <b className="green-text">{formatter.format(data?.savingsRewards)}</b>
           </h4>
           <p className="green-text">First to complete contribution wins the rewards.</p>
         </div>
         <hr />
-        <h5 className="uppercase">Pool Participants ({data.participants.length})</h5>
-        {data.participants.map(participant => (
+        <h5 className="uppercase">Pool Participants ({data?.numberOfContributors})</h5>
+        {data?.participants?.map(participant => (
           <div key={participant.username}>
             <h3>{participant.username}'s contribution</h3>
             <h4 className="text-light">
-              {formatter.format(participant.contribution)} / {formatter.format(individualGoal)}
+              {formatter.format(participant.contribution)} / {formatter.format(data?.individualGoal)}
             </h4>
           </div>
         ))}

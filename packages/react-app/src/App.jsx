@@ -5,6 +5,9 @@ import { CHAIN_NAMESPACES, WALLET_ADAPTERS } from "@web3auth/base";
 import { Redirect, Route, Switch, useHistory } from "react-router-dom";
 import { SignIn, Home, Pool, Invitation, Contribution, New, Confirmation } from "./views";
 import { CLIENT_ID, MUMBAI_CHAIN_ID, ALCHEMY_KEY } from "./constants";
+import Web3 from "web3";
+import contracts from "./contracts/external_contracts";
+import { web3RPC } from "./hooks";
 import "./App.css";
 
 function App(props) {
@@ -12,6 +15,8 @@ function App(props) {
   const [web3auth, setWeb3auth] = useState();
   const [provider, setProvider] = useState();
   const [userInfo, setUserInfo] = useState();
+  const [contract, setContract] = useState();
+  const [address, setAddress] = useState();
 
   const getUserInfo = async () => {
     if (web3auth) {
@@ -67,6 +72,18 @@ function App(props) {
     init();
   }, [!provider]);
 
+  useEffect(() => {
+    async function fetchData() {
+      if (provider) {
+        setAddress(await web3RPC.getAccounts(provider));
+        const web3 = new Web3(provider);
+        const SavingsPool = contracts[1].contracts.SavingsPool;
+        setContract(new web3.eth.Contract(SavingsPool.abi, SavingsPool.address));
+      }
+    }
+    fetchData();
+  }, [provider]);
+
   const logout = async () => {
     if (web3auth) {
       await web3auth.logout();
@@ -101,10 +118,10 @@ function App(props) {
             <Invitation />
           </Route>
           <Route exact path="/home">
-            {auth(<Home provider={provider} userInfo={userInfo} />)}
+            {auth(<Home contract={contract} address={address} userInfo={userInfo} />)}
           </Route>
           <Route path="/new">{auth(<New />)}</Route>
-          <Route path="/pool/:id">{auth(<Pool />)}</Route>
+          <Route path="/pool/:id">{auth(<Pool contract={contract} />)}</Route>
           <Route path="/contribution/pool/:id">{auth(<Contribution />)}</Route>
           <Route path="/confirmation/:pool/:amount">{auth(<Confirmation />)}</Route>
         </Switch>
