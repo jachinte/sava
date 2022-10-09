@@ -7,7 +7,9 @@ export const ETHERSCAN_KEY = "DNXJA8RX2Q3VZ4URQIWP7Z68CJXQZSC6AW";
 // BLOCKNATIVE ID FOR Notify.js:
 export const BLOCKNATIVE_DAPPID = "0b58206a-f3c0-4701-a62f-73c7243e8c77";
 
-export const ALCHEMY_KEY = "oKxs-03sij-U_N0iOlrSsZFr29-IqbuF";
+export const ALCHEMY_KEY = "RGPhWsJCplbShwpSYOo1Df7oplSaTl8d";
+export const MUMBAI_CHAIN_ID = "0x13881";
+export const CLIENT_ID = "BFt8f0zCLJtfThnpTEsmOs8EdgHgmIkKsObguZbdp7XEEwheU4BCDH8shgSBQ3l-UVTKV0qqrLIEnsXSYe35kpE";
 
 const localRpcUrl = process.env.REACT_APP_CODESPACES
   ? `https://${window.location.hostname.replace("3000", "8545")}`

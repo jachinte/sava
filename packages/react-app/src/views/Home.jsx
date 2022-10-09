@@ -1,122 +1,117 @@
-import { useContractReader } from "eth-hooks";
-import { ethers } from "ethers";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { poolContract } from "../hooks";
+import { addressAsName, daysLeft, weiToEthFormatted } from "../helpers";
+import "./Home.css";
 
-/**
- * web3 props can be passed from '../App.jsx' into your local view component for use
- * @param {*} yourLocalBalance balance on current network
- * @param {*} readContracts contracts from current chain already pre-loaded using ethers contract module. More here https://docs.ethers.io/v5/api/contract/contract/
- * @returns react component
- **/
-function Home({ yourLocalBalance, readContracts }) {
-  // you can also use hooks locally in your component of choice
-  // in this case, let's keep track of 'purpose' variable from our contract
-  const purpose = useContractReader(readContracts, "YourContract", "purpose");
+function PoolItem({ data, address }) {
+  if (!data || !address) {
+    return;
+  }
 
   return (
-    <div>
-      <div style={{ margin: 32 }}>
-        <span style={{ marginRight: 8 }}>📝</span>
-        This Is Your App Home. You can start editing it in{" "}
-        <span
-          className="highlight"
-          style={{ marginLeft: 4, /* backgroundColor: "#f9f9f9", */ padding: 4, borderRadius: 4, fontWeight: "bolder" }}
-        >
-          packages/react-app/src/views/Home.jsx
-        </span>
-      </div>
-      <div style={{ margin: 32 }}>
-        <span style={{ marginRight: 8 }}>✏️</span>
-        Edit your smart contract{" "}
-        <span
-          className="highlight"
-          style={{ marginLeft: 4, /* backgroundColor: "#f9f9f9", */ padding: 4, borderRadius: 4, fontWeight: "bolder" }}
-        >
-          YourContract.sol
-        </span>{" "}
-        in{" "}
-        <span
-          className="highlight"
-          style={{ marginLeft: 4, /* backgroundColor: "#f9f9f9", */ padding: 4, borderRadius: 4, fontWeight: "bolder" }}
-        >
-          packages/hardhat/contracts
-        </span>
-      </div>
-      {!purpose ? (
-        <div style={{ margin: 32 }}>
-          <span style={{ marginRight: 8 }}>👷‍♀️</span>
-          You haven't deployed your contract yet, run
-          <span
-            className="highlight"
-            style={{
-              marginLeft: 4,
-              /* backgroundColor: "#f9f9f9", */ padding: 4,
-              borderRadius: 4,
-              fontWeight: "bolder",
-            }}
-          >
-            yarn chain
-          </span>{" "}
-          and{" "}
-          <span
-            className="highlight"
-            style={{
-              marginLeft: 4,
-              /* backgroundColor: "#f9f9f9", */ padding: 4,
-              borderRadius: 4,
-              fontWeight: "bolder",
-            }}
-          >
-            yarn deploy
-          </span>{" "}
-          to deploy your first contract!
+    <div className="pool-item">
+      <header>
+        <h4>{data.name}</h4>
+        <p>
+          Save{" "}
+          <b>
+            {weiToEthFormatted(data.individualGoal)} {data.currency}
+          </b>{" "}
+          in <b>{daysLeft(data.startDate, data.endDate)} days</b>.
+        </p>
+      </header>
+      {data.participants ? (
+        <div>
+          <h5 className="uppercase">Pool participants ({data.participants.length})</h5>
+          <ul className="screen--user-list">
+            {data.participants.map(participant => (
+              <li ket={participant}>
+                <img alt={participant} src="/images/avatar.jpg" />
+                <span>
+                  <b className="uppercase">{addressAsName(participant)}</b>
+                  {address === participant ? " (me)" : ""}
+                </span>
+              </li>
+            ))}
+          </ul>
         </div>
       ) : (
-        <div style={{ margin: 32 }}>
-          <span style={{ marginRight: 8 }}>🤓</span>
-          The "purpose" variable from your contract is{" "}
-          <span
-            className="highlight"
-            style={{
-              marginLeft: 4,
-              /* backgroundColor: "#f9f9f9", */ padding: 4,
-              borderRadius: 4,
-              fontWeight: "bolder",
-            }}
-          >
-            {purpose}
-          </span>
-        </div>
+        <div></div>
       )}
-
-      <div style={{ margin: 32 }}>
-        <span style={{ marginRight: 8 }}>🤖</span>
-        An example prop of your balance{" "}
-        <span style={{ fontWeight: "bold", color: "green" }}>({ethers.utils.formatEther(yourLocalBalance)})</span> was
-        passed into the
-        <span
-          className="highlight"
-          style={{ marginLeft: 4, /* backgroundColor: "#f9f9f9", */ padding: 4, borderRadius: 4, fontWeight: "bolder" }}
-        >
-          Home.jsx
-        </span>{" "}
-        component from
-        <span
-          className="highlight"
-          style={{ marginLeft: 4, /* backgroundColor: "#f9f9f9", */ padding: 4, borderRadius: 4, fontWeight: "bolder" }}
-        >
-          App.jsx
+      {data.winnerSelected && data.winner === address && (
+        <span className="green-text">
+          <b>You</b> won the reward for fulfilling your commitment first.
         </span>
+      )}
+      {data.winnerSelected && data.winner !== address && (
+        <span className="green-text">
+          <b>{addressAsName(data.winner)}</b> has won the reward for fulfilling his commitment first.
+        </span>
+      )}
+      <Link to={`/pool/${data["0"]}`}>
+        <span className="btn btn-lg btn-blue">Enter pool</span>
+      </Link>
+    </div>
+  );
+}
+
+/**
+ * Home screen.
+ * @returns react component
+ **/
+function Home({ address, contract }) {
+  const [userPools, setUserPools] = useState();
+
+  useEffect(() => {
+    async function fetchData() {
+      if (contract) {
+        let rpools = await poolContract.getUserPools(contract, address);
+        rpools = await Promise.all(
+          rpools.map(async p => {
+            p.participants = await poolContract.getContributorsFromPool(contract, p["0"]);
+            return p;
+          }),
+        );
+        setUserPools(rpools);
+      }
+    }
+    fetchData();
+  }, [address, contract, !userPools]);
+
+  return (
+    <div id="home" className="screen">
+      <header id="screen--header">
+        <div id="screen--illustration"></div>
+        <h1 id="screen--title">Welcome back, {addressAsName(address)}!</h1>
+      </header>
+      <div id="screen--main">
+        {userPools && userPools.length > 0 ? (
+          <>
+            <h3>Your existing pools</h3>
+            {userPools.map(pool => (
+              <PoolItem key={pool.name} data={pool} address={address} />
+            ))}
+          </>
+        ) : (
+          <>
+            <h4>You haven't joined any pools yet.</h4>
+            <div className="screen--empty-state"></div>
+          </>
+        )}
       </div>
-      <div style={{ margin: 32 }}>
-        <span style={{ marginRight: 8 }}>💭</span>
-        Check out the <Link to="/hints">"Hints"</Link> tab for more tips.
-      </div>
-      <div style={{ margin: 32 }}>
-        <span style={{ marginRight: 8 }}>🛠</span>
-        Tinker with your smart contract using the <Link to="/debug">"Debug Contract"</Link> tab.
-      </div>
+      <footer id="screen--footer">
+        <Link to="/new">
+          <div id="footer-btn">
+            <div className="btn-group">
+              <span className="btn-label" style={{ display: "none" }}>
+                Add a new pool
+              </span>
+              <span className="btn-add btn-blue">+</span>
+            </div>
+          </div>
+        </Link>
+      </footer>
     </div>
   );
 }
