@@ -22,7 +22,7 @@ export function daysLeftStr(startDate, endDate) {
   return `${days} day${s} left`;
 }
 
-export function addressAsName(address, chars = 5) {
+export function addressAsName(address, chars = 4) {
   if (!address) {
     return "";
   }
