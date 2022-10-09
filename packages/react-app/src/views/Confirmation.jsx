@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { daysLeftStr, fromContractDataToAppData } from "../helpers";
+import { daysLeftStr, fromContractDataToAppData, weiToEthFormatted } from "../helpers";
 import { poolContract } from "../hooks";
 import "./Confirmation.css";
 
@@ -19,8 +19,6 @@ function Confirmation({ contract }) {
     fetchData();
   }, [contract, !data]);
 
-  const formatter = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 2 });
-
   return (
     <div id="confirmation" className="screen">
       <header id="screen--header">
@@ -29,7 +27,7 @@ function Confirmation({ contract }) {
       <div id="screen--main">
         <div>
           <h3>Contribution confirmed</h3>
-          <h1>{formatter.format(amount)}</h1>
+          <h1>{weiToEthFormatted(amount)}</h1>
         </div>
         <footer id="screen--footer">
           <Link to={`/pool/${pool}`}>

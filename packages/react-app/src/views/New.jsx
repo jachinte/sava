@@ -1,6 +1,7 @@
+import { BigNumber } from "ethers";
 import React, { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
-import Web3 from "web3";
+import { ethToWei } from "../helpers/poolHelpers";
 import { poolContract } from "../hooks";
 import "./Contribution.css";
 
@@ -22,7 +23,13 @@ function New({ contract, address }) {
       setButtonDisabled(true);
       setButtonText("Processing...");
       const endDate = Math.floor(new Date(date).getTime() / 1000.0);
-      await poolContract.createSavingPool(contract, address, name, individualGoal, endDate);
+      await poolContract.createSavingPool(
+        contract,
+        address,
+        name,
+        BigNumber.from(`${ethToWei(individualGoal)}`),
+        endDate,
+      );
       const id = await poolContract.getLastPoolIndexPerCreator(contract, address);
       history.push(`/join/pool/${id}`);
     }
@@ -43,7 +50,7 @@ function New({ contract, address }) {
           <input type="text" value={name} onChange={e => setName(e.target.value)} />
         </div>
         <div>
-          <h3>Individual goal</h3>
+          <h3>Individual goal (MATIC)</h3>
           <input type="number" value={individualGoal} onChange={e => setIndividualGoal(e.target.value)} />
         </div>
         <div>

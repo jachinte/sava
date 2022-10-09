@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import "./Pool.css";
-import { addressAsName, daysLeftStr, fromContractDataToAppData } from "../helpers";
+import { addressAsName, daysLeftStr, fromContractDataToAppData, weiToEthFormatted } from "../helpers";
 import { poolContract } from "../hooks";
 
 /**
@@ -58,8 +58,6 @@ function Pool({ contract, address }) {
     }
   };
 
-  const formatter = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 2 });
-
   return (
     <div id="pool" className="screen">
       <header id="screen--header">
@@ -77,14 +75,16 @@ function Pool({ contract, address }) {
         <div>
           <h3>Pool status and goal</h3>
           <h4>
-            <b>{formatter.format(data?.currentSavings)}</b>{" "}
-            <span className="text-light">of {formatter.format(data?.individualGoal * data?.numberOfContributors)}</span>
+            <b>{weiToEthFormatted(data?.currentSavings)}</b>{" "}
+            <span className="text-light">
+              of {weiToEthFormatted(data?.individualGoal * data?.numberOfContributors)}
+            </span>
           </h4>
         </div>
         <div>
           <h3>Savings rewards</h3>
           <h4>
-            <b className="green-text">{formatter.format(data?.savingsRewards)}</b>
+            <b className="green-text">{weiToEthFormatted(data?.savingsRewards)}</b>
           </h4>
           {data?.winnerSelected && data?.winner === address && (
             <p className="green-text">
@@ -108,8 +108,8 @@ function Pool({ contract, address }) {
               {contribution.address === data?.winner ? " ⭐" : ""}
             </h3>
             <h4>
-              {formatter.format(contribution.value)}{" "}
-              <span className="text-light">/ {formatter.format(data?.individualGoal)}</span>
+              {weiToEthFormatted(contribution.value)}{" "}
+              <span className="text-light">/ {weiToEthFormatted(data?.individualGoal)}</span>
             </h4>
           </div>
         ))}

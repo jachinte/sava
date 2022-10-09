@@ -1,6 +1,7 @@
+import { BigNumber } from "ethers";
 import React, { useEffect, useState } from "react";
 import { Link, useHistory, useParams } from "react-router-dom";
-import { daysLeftStr, fromContractDataToAppData } from "../helpers";
+import { daysLeftStr, ethToWei, fromContractDataToAppData, weiToEthFormatted } from "../helpers";
 import { poolContract } from "../hooks";
 import "./Contribution.css";
 
@@ -27,13 +28,11 @@ function Contribution({ contract, address }) {
     fetchData();
   }, [contract, !pool, !maximumAllowed, !currentContribution]);
 
-  const formatter = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 2 });
-
   const onClickContribute = async e => {
     if (contract) {
       setButtonDisabled(true);
       setButtonText("Processing...");
-      await poolContract.contributeToSavingPool(contract, id, address, amount);
+      await poolContract.contributeToSavingPool(contract, id, address, BigNumber.from(`${ethToWei(amount)}`));
       history.push(`/confirmation/${id}/${amount}`);
     }
   };
@@ -54,11 +53,11 @@ function Contribution({ contract, address }) {
         </div>
         <div>
           <h5 className="uppercase">Maximum allowed</h5>
-          <h4>{formatter.format(maximumAllowed)}</h4>
+          <h4>{weiToEthFormatted(maximumAllowed)}</h4>
         </div>
         <div>
           <h5 className="uppercase">Current contribution</h5>
-          <h4>{formatter.format(currentContribution)}</h4>
+          <h4>{weiToEthFormatted(currentContribution)}</h4>
         </div>
       </div>
       <footer id="screen--footer">

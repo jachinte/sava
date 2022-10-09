@@ -1,15 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { poolContract } from "../hooks";
-import { addressAsName, daysLeft } from "../helpers";
+import { addressAsName, daysLeft, weiToEthFormatted } from "../helpers";
 import "./Home.css";
 
 function PoolItem({ data, address }) {
   if (!data || !address) {
     return;
   }
-
-  const formatter = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 2 });
 
   return (
     <div className="pool-item">
@@ -18,7 +16,7 @@ function PoolItem({ data, address }) {
         <p>
           Save{" "}
           <b>
-            {formatter.format(data.individualGoal)} {data.currency}
+            {weiToEthFormatted(data.individualGoal)} {data.currency}
           </b>{" "}
           in <b>{daysLeft(data.startDate, data.endDate)} days</b>.
         </p>

@@ -1,3 +1,17 @@
+const formatter = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 4 });
+
+export function ethToWei(amount) {
+  return amount * Math.pow(10, 18);
+}
+
+export function weiToEth(amount) {
+  return amount / Math.pow(10, 18);
+}
+
+export function weiToEthFormatted(amount) {
+  return formatter.format(weiToEth(amount));
+}
+
 export function daysLeft(startDate, endDate) {
   return Math.max(Math.round((endDate - startDate) / (24 * 3600)), 0);
 }

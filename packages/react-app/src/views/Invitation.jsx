@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Link, useHistory, useParams } from "react-router-dom";
-import { daysLeft, fromContractDataToAppData } from "../helpers";
+import { daysLeft, ethToWei, fromContractDataToAppData, weiToEthFormatted } from "../helpers";
 import "./SignIn.css";
 import "./Invitation.css";
 import { poolContract } from "../hooks";
+import { BigNumber } from "ethers";
 
 /**
  * Invitation screen.
@@ -30,12 +31,10 @@ function Invitation({ contract, address }) {
     if (contract) {
       setButtonDisabled(true);
       setButtonText("Processing...");
-      await poolContract.contributeToSavingPool(contract, pool, address, amount);
+      await poolContract.contributeToSavingPool(contract, pool, address, BigNumber.from(`${ethToWei(amount)}`));
       history.push(`/confirmation/${pool}/${amount}`);
     }
   };
-
-  const formatter = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 2 });
 
   return (
     <div id="invitation" className="screen">
@@ -50,7 +49,7 @@ function Invitation({ contract, address }) {
         <div>
           <h5 className="uppercase">Goal</h5>
           <h4 className="text-light">
-            Save {formatter.format(data?.individualGoal)} in {daysLeft(data?.startDate, data?.endDate)} days
+            Save {weiToEthFormatted(data?.individualGoal)} in {daysLeft(data?.startDate, data?.endDate)} days
           </h4>
         </div>
       </header>
