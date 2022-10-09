@@ -47,7 +47,8 @@ Economic conditions that are found in Latin America exist in many places in the 
 Sava is designed to be an easily accessible public good. It that can be used in other DeFi/ReFi services, It's incentives grow stronger the more people join the platform – this is just the catalyst that gets all these global communities to that better life.
 
 #### Polygon
-We are using Polygon because of its quick finality times, its cost effective gas costs and, most importantly, its DeFi ecosystem which makes Sava's platform rewards work.
+We are using Polygon because of its quick finality times, its cost effective gas costs and, most importantly, its DeFi ecosystem which makes Sava's platform rewards work. 
+Sava's contract address on Mumbai: 0x23aEbE528C2ef0C269418d72F5F344B13cA74DED
 
 #### Web3Auth
 We are using Web3Auth. It is integral to the mission of making the onboarding experience as frictionless as possible on our platform Sava.
