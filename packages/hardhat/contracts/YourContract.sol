@@ -27,9 +27,11 @@ contract YourContract {
     //Saving Pool Global Counter
     uint256 public autoincrementSavingPoolIndex; 
 
-    //Event
+    //Event emmited when a user claim his funds
     event ClaimResponse (bool success, bytes data);
 
+    //Event emitted when a user create a saving pool
+    event NewSavingPool (uint256 index);
 
     constructor () payable {
         SavingPool storage firstSavingPool = savingPools.push();
@@ -53,7 +55,7 @@ contract YourContract {
     *@param startDate the savings pool startDate
     *@param endDate the savings pool endDate
     */
-    function createSavingPool(string calldata name, uint256 individualGoal, uint256 startDate, uint256 endDate) public returns (uint256){
+    function createSavingPool(string calldata name, uint256 individualGoal, uint256 startDate, uint256 endDate) public {
         SavingPool storage newSavingPool = savingPools.push();
         newSavingPool.name = name;
         newSavingPool.savingPoolId = autoincrementSavingPoolIndex;
@@ -67,7 +69,7 @@ contract YourContract {
 
         autoincrementSavingPoolIndex++;
 
-        return autoincrementSavingPoolIndex-1;
+        emit NewSavingPool(autoincrementSavingPoolIndex-1);
     }
 
     /**
