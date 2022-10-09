@@ -5,7 +5,12 @@ import { addressAsName, daysLeft } from "../helpers";
 import "./Home.css";
 
 function PoolItem({ data, address }) {
+  if (!data || !address) {
+    return;
+  }
+
   const formatter = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 2 });
+
   return (
     <div className="pool-item">
       <header>
@@ -36,7 +41,12 @@ function PoolItem({ data, address }) {
       ) : (
         <div></div>
       )}
-      {data.winnerSelected && (
+      {data.winnerSelected && data.winner === address && (
+        <span className="green-text">
+          <b>You</b> won the reward for fulfilling your commitment first.
+        </span>
+      )}
+      {data.winnerSelected && data.winner !== address && (
         <span className="green-text">
           <b>{addressAsName(data.winner)}</b> has won the reward for fulfilling his commitment first.
         </span>
@@ -69,7 +79,7 @@ function Home({ address, contract }) {
       }
     }
     fetchData();
-  }, [address, contract]);
+  }, [address, contract, !userPools]);
 
   return (
     <div id="home" className="screen">
@@ -82,7 +92,7 @@ function Home({ address, contract }) {
           <>
             <h3>Your existing pools</h3>
             {userPools.map(pool => (
-              <PoolItem key={pool["0"]} data={pool} address={address} />
+              <PoolItem key={pool.name} data={pool} address={address} />
             ))}
           </>
         ) : (

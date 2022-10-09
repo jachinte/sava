@@ -88,15 +88,15 @@ function App(props) {
             {auth(<Redirect to="/home" />)}
           </Route>
           <Route exact path="/join/pool/:pool">
-            <Invitation />
+            <Invitation contract={contract} address={address} />
           </Route>
           <Route exact path="/home">
             {auth(<Home contract={contract} address={address} />)}
           </Route>
-          <Route path="/new">{auth(<New />)}</Route>
+          <Route path="/new">{auth(<New contract={contract} address={address} />)}</Route>
           <Route path="/pool/:id">{auth(<Pool contract={contract} address={address} />)}</Route>
           <Route path="/contribution/pool/:id">{auth(<Contribution contract={contract} address={address} />)}</Route>
-          <Route path="/confirmation/:pool/:amount">{auth(<Confirmation />)}</Route>
+          <Route path="/confirmation/:pool/:amount">{auth(<Confirmation contract={contract} />)}</Route>
         </Switch>
       </div>
     </>

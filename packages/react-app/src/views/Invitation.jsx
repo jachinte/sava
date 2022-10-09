@@ -1,43 +1,70 @@
-import React from "react";
-import { Link, useParams } from "react-router-dom";
-import { getPoolData } from "../helpers";
+import React, { useEffect, useState } from "react";
+import { Link, useHistory, useParams } from "react-router-dom";
+import { daysLeft, fromContractDataToAppData } from "../helpers";
 import "./SignIn.css";
 import "./Invitation.css";
+import { poolContract } from "../hooks";
 
 /**
  * Invitation screen.
  * @returns react component
  **/
-function Invitation() {
+function Invitation({ contract, address }) {
   const { pool } = useParams();
-  const data = getPoolData(pool);
+  const history = useHistory();
+  const [data, setData] = useState();
+  const [amount, setAmount] = useState(0);
+  const [buttonDisabled, setButtonDisabled] = useState(false);
+  const [buttonText, setButtonText] = useState("Join pool");
+
+  useEffect(() => {
+    async function fetchData() {
+      if (contract) {
+        setData(fromContractDataToAppData(await poolContract.getPool(contract, pool)));
+      }
+    }
+    fetchData();
+  }, [contract, pool, !data]);
+
+  const onClickJoin = async e => {
+    if (contract) {
+      setButtonDisabled(true);
+      setButtonText("Processing...");
+      await poolContract.contributeToSavingPool(contract, pool, address, amount);
+      history.push(`/confirmation/${pool}/${amount}`);
+    }
+  };
+
+  const formatter = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 2 });
+
   return (
-    <div id="signin" className="screen">
-      <header id="signin--header">
-        <div id="signin--illustration"></div>
+    <div id="invitation" className="screen">
+      <header id="screen--header">
+        <div id="screen--illustration"></div>
         <div className="title-bar">
           <Link to={`/home`} id="goback-btn"></Link>
         </div>
         <h2 id="invitation-title">
-          You're invited to join pool <b>{data.name}</b>
+          Make a contribution to join pool <b>{data?.name}</b>
         </h2>
-      </header>
-      <div id="signin--main">
-        <div className="signin--main-title">
-          Login
-          <br />
-          With
+        <div>
+          <h5 className="uppercase">Goal</h5>
+          <h4 className="text-light">
+            Save {formatter.format(data?.individualGoal)} in {daysLeft(data?.startDate, data?.endDate)} days
+          </h4>
         </div>
-        <nav className="signin--buttons">
-          <Link to="/pool">
-            <span className="signin--btn signin--btn-facebook"></span>
-          </Link>
-          <Link to="/pool">
-            <span className="signin--btn signin--btn-google"></span>
-          </Link>
-        </nav>
+      </header>
+      <div id="screen--main">
+        <div>
+          <h3>Enter your first deposit</h3>
+          <input type="number" value={amount} onChange={e => setAmount(e.target.value)} />
+        </div>
       </div>
-      <footer id="signin--footer"></footer>
+      <footer id="screen--footer">
+        <button onClick={onClickJoin} className="btn btn-lg btn-blue" disabled={buttonDisabled}>
+          {buttonText}
+        </button>
+      </footer>
     </div>
   );
 }

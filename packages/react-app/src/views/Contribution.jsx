@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useHistory, useParams } from "react-router-dom";
-import { daysLeft, fromContractDataToAppData } from "../helpers";
+import { daysLeftStr, fromContractDataToAppData } from "../helpers";
 import { poolContract } from "../hooks";
 import "./Contribution.css";
 
@@ -12,7 +12,7 @@ function Contribution({ contract, address }) {
   const { id } = useParams();
   const history = useHistory();
   const [buttonDisabled, setButtonDisabled] = useState(false);
-  const [buttonText, setButtonText] = useState("Make Contribution");
+  const [buttonText, setButtonText] = useState("Make contribution");
   const [amount, setAmount] = useState(0);
   const [pool, setPool] = useState({});
   const [maximumAllowed, setMaximumAllowed] = useState(0);
@@ -65,7 +65,7 @@ function Contribution({ contract, address }) {
         <button onClick={onClickContribute} className="btn btn-lg btn-blue" disabled={buttonDisabled}>
           {buttonText}
         </button>
-        <h4>{daysLeft(pool?.startDate, pool?.endDate)} days left</h4>
+        <h4>{daysLeftStr(pool?.startDate, pool?.endDate)}</h4>
       </footer>
     </div>
   );

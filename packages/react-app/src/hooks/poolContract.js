@@ -1,6 +1,13 @@
-import Web3 from "web3";
-
 const poolContract = (() => {
+  const claimSavings = async (contract, index, address) => {
+    return await contract.methods.claimSavings(index).send({ from: address });
+  };
+
+  const createSavingPool = async (contract, address, name, individualGoal, endDate) => {
+    const startDate = new Date().getTime();
+    return await contract.methods.createSavingPool(name, individualGoal, startDate, endDate).send({ from: address });
+  };
+
   const contributeToSavingPool = async (contract, index, address, amount) => {
     return await contract.methods.contributeToSavingPool(index).send({ from: address, value: amount });
   };
@@ -35,6 +42,8 @@ const poolContract = (() => {
   };
 
   return {
+    claimSavings,
+    createSavingPool,
     contributeToSavingPool,
     getUserPools,
     getPool,

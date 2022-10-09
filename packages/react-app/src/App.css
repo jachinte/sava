@@ -73,7 +73,7 @@
 }
 
 .screen h2 {
-  font-size: 2.8em;
+  font-size: 2.5em;
   font-weight: bold;
   line-height: 1.2em;
 }
@@ -127,6 +127,10 @@
 
 .screen .text-light {
   font-weight: 300;
+}
+
+.screen .text-center {
+  text-align: center;
 }
 
 .screen .green-text {

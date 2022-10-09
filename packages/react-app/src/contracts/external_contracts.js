@@ -49,7 +49,13 @@ const SAVINGSABI = [
       },
     ],
     name: "createSavingPool",
-    outputs: [],
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
     stateMutability: "nonpayable",
     type: "function",
   },
@@ -396,7 +402,7 @@ module.exports = {
   1: {
     contracts: {
       SavingsPool: {
-        address: "0x347d8DFc9F9E174fAD886fCB1D977D8bff51f2a0",
+        address: "0x3fb19E6c77dd18e8ceC1662ec3bbd7D3a088B88a",
         abi: SAVINGSABI,
       },
     },

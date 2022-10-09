@@ -1,15 +1,26 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import { daysLeftStr, fromContractDataToAppData } from "../helpers";
+import { poolContract } from "../hooks";
 import "./Confirmation.css";
 
 /**
  * Confirmation screen.
  * @returns react component
  **/
-function Confirmation() {
+function Confirmation({ contract }) {
   const { pool, amount } = useParams();
-  const username = "leon"; // TODO Get this from the session
+  const [data, setData] = useState();
+
+  useEffect(() => {
+    async function fetchData() {
+      setData(fromContractDataToAppData(await poolContract.getPool(contract, pool)));
+    }
+    fetchData();
+  }, [contract, !data]);
+
   const formatter = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 2 });
+
   return (
     <div id="confirmation" className="screen">
       <header id="screen--header">
@@ -24,7 +35,7 @@ function Confirmation() {
           <Link to={`/pool/${pool}`}>
             <span className="btn btn-lg btn-blue">Go back to dashboard</span>
           </Link>
-          <h4>31 days left</h4>
+          <h4>{daysLeftStr(data?.startDate, data?.endDate)}</h4>
         </footer>
       </div>
     </div>

@@ -1,16 +1,33 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
+import { poolContract } from "../hooks";
 import "./Contribution.css";
 
 /**
  * New pool screen.
  * @returns react component
  **/
-function New() {
-  const [name, setName] = useState();
+function New({ contract, address }) {
+  const history = useHistory();
+  const [buttonDisabled, setButtonDisabled] = useState(false);
+  const [buttonText, setButtonText] = useState("Create pool");
+
+  const [name, setName] = useState("");
   const [individualGoal, setIndividualGoal] = useState(0);
-  const [date, setDate] = useState(new Date());
-  const id = 1;
+  const [date, setDate] = useState("");
+
+  const create = async e => {
+    if (contract) {
+      setButtonDisabled(true);
+      setButtonText("Processing...");
+      const endDate = new Date(date).getTime();
+      const response = await poolContract.createSavingPool(contract, address, name, individualGoal, endDate);
+      console.log("response", response);
+      const id = 0;
+      history.push(`/join/pool/${id}`);
+    }
+  };
+
   return (
     <div id="contribution" className="screen">
       <header id="screen--header">
@@ -35,9 +52,9 @@ function New() {
         </div>
       </div>
       <footer id="screen--footer">
-        <Link to={`/pool/${id}`}>
-          <span className="btn btn-lg btn-blue">Create Pool</span>
-        </Link>
+        <button onClick={create} className="btn btn-lg btn-blue" disabled={buttonDisabled}>
+          {buttonText}
+        </button>
       </footer>
     </div>
   );

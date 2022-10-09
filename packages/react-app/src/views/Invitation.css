@@ -3,3 +3,7 @@
   font-weight: 500;
   line-height: 1.5;
 }
+
+#invitation #signin--footer {
+  width: 100%;
+}

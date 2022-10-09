@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import "./Pool.css";
-import { addressAsName, daysLeft, fromContractDataToAppData } from "../helpers";
+import { addressAsName, daysLeftStr, fromContractDataToAppData } from "../helpers";
 import { poolContract } from "../hooks";
 
 /**
@@ -10,23 +10,19 @@ import { poolContract } from "../hooks";
  **/
 function Pool({ contract, address }) {
   const { id } = useParams();
-  // const data = getPoolData(id);
+  const [buttonDisabled, setButtonDisabled] = useState(false);
+  const [buttonText, setButtonText] = useState("Claim your funds");
 
-  // const [key, setKey] = useState();
-  // useEffect(() => {
-  //   async function fetchData() {
-  //     setKey(await web3RPC.getPrivateKey(provider));
-  //   }
-  //   fetchData();
-  // }, []);
-
-  const [data, setData] = useState({});
+  const [data, setData] = useState();
   const [contributions, setContributions] = useState([]);
   const [savingsCompleted, setSavingsCompleted] = useState(false);
   const [poolEnded, setPoolEnded] = useState(false);
 
   useEffect(() => {
     async function fetchData() {
+      if (!contract) {
+        return;
+      }
       setData(fromContractDataToAppData(await poolContract.getPool(contract, id)));
       const addresses = await poolContract.getContributorsFromPool(contract, id);
       const usersData = await Promise.all(
@@ -38,7 +34,7 @@ function Pool({ contract, address }) {
       setContributions(usersData);
     }
     fetchData();
-  }, [!data]);
+  }, [contract, address, !data]);
 
   useEffect(() => {
     let completed = false;
@@ -50,6 +46,15 @@ function Pool({ contract, address }) {
     setSavingsCompleted(completed);
     setPoolEnded(new Date() > new Date(data?.endDate * 1000));
   }, [address, data, contributions]);
+
+  const claimSavings = async e => {
+    if (contract && address) {
+      setButtonDisabled(true);
+      setButtonText("Processing...");
+      await poolContract.claimSavings(contract, id, address);
+      setButtonText("You claimed your savings");
+    }
+  };
 
   const formatter = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 2 });
 
@@ -104,19 +109,18 @@ function Pool({ contract, address }) {
         ))}
       </div>
       <footer id="screen--footer">
-        {!poolEnded && savingsCompleted ? (
-          <span className="btn btn-lg btn-disabled">You made it!</span>
-        ) : (
+        {!poolEnded && savingsCompleted && <span className="btn btn-lg btn-disabled">You made it!</span>}
+        {!poolEnded && !savingsCompleted && (
           <Link to={`/contribution/pool/${id}`}>
             <span className="btn btn-lg btn-blue">Contribute to this pool</span>
           </Link>
         )}
         {poolEnded && (
-          <Link to={`/claim/pool/${id}`}>
-            <span className="btn btn-lg btn-green">Claim your funds</span>
-          </Link>
+          <button onClick={claimSavings} disabled={buttonDisabled} className="btn btn-lg btn-green">
+            {buttonText}
+          </button>
         )}
-        <h4>{poolEnded ? "The pool has ended." : `${daysLeft(data?.startDate, data?.endDate)} days left`}</h4>
+        <h4>{poolEnded ? "The pool has ended." : daysLeftStr(data?.startDate, data?.endDate)}</h4>
       </footer>
     </div>
   );

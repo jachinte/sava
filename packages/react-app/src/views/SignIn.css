@@ -22,8 +22,23 @@
     background-repeat: no-repeat;
     background-position: center top;
     background-size: contain;
-    min-height: 180px;
-    max-height: 250px;
+    min-height: 140px;
+    max-height: 220px;
+}
+
+#signin--app-name {
+  background-image: url("../assets/sava.svg");
+    background-repeat: no-repeat;
+    background-position: center top;
+    background-size: contain;
+    min-height: 100px;
+    max-height: 120px;
+}
+
+#signin--subheading {
+  color: #AAA;
+  font-size: 2em;
+  font-weight: 500;
 }
 
 #signin--main {

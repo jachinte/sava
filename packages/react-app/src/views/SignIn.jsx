@@ -20,10 +20,9 @@ function SignIn({ web3auth, provider, setProvider, redirectPath }) {
     <div id="signin" className="screen">
       <header id="signin--header">
         <div id="signin--illustration"></div>
-        <h1 id="screen--title">
-          Savings
-          <br />
-          Pool
+        <div id="signin--app-name"></div>
+        <h1 id="signin--subheading" className="text-center">
+          Descentralized Collaborative Savings For Latin America
         </h1>
       </header>
       <div id="signin--main">
