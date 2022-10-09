@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import "./Pool.css";
-import { fromContractDataToAppData } from "../helpers";
+import { addressAsName, daysLeft, fromContractDataToAppData } from "../helpers";
 import { poolContract } from "../hooks";
 
 /**
  * Pool screen.
  * @returns react component
  **/
-function Pool({ contract }) {
+function Pool({ contract, address }) {
   const { id } = useParams();
   // const data = getPoolData(id);
 
@@ -21,16 +21,19 @@ function Pool({ contract }) {
   // }, []);
 
   const [data, setData] = useState();
-  const [attrs, setAttrs] = useState();
+  const [contributions, setContributions] = useState();
 
   useEffect(() => {
     async function fetchData() {
       setData(fromContractDataToAppData(await poolContract.getPool(contract, id)));
-      if (data) {
-        setAttrs({
-          balance: data?.participants?.map(p => p.contribution).reduce((sum, elem) => sum + elem, 0),
-        });
-      }
+      const addresses = await poolContract.getContributorsFromPool(contract, id);
+      const usersData = await Promise.all(
+        addresses.map(async address => {
+          const contribution = await poolContract.getCurrentContributionPerUserInPool(contract, id, address);
+          return { address, value: contribution };
+        }),
+      );
+      setContributions(usersData);
     }
     fetchData();
   }, [!data]);
@@ -45,12 +48,16 @@ function Pool({ contract }) {
           <Link to={`/home`} id="goback-btn"></Link>
           <h4>{data?.name}</h4>
         </div>
+        <Link to={`/join/pool/${id}`} className="title-bar" style={{ marginTop: -30 }}>
+          <span id="invite-btn"></span>
+          <span>Invite your friends to this pool</span>
+        </Link>
       </header>
       <div id="screen--main">
         <div>
           <h3>Pool status and goal</h3>
           <h4>
-            <b>{formatter.format(attrs?.balance)}</b>{" "}
+            <b>{formatter.format(data?.currentSavings)}</b>{" "}
             <span className="text-light">of {formatter.format(data?.individualGoal * data?.numberOfContributors)}</span>
           </h4>
         </div>
@@ -59,27 +66,36 @@ function Pool({ contract }) {
           <h4>
             <b className="green-text">{formatter.format(data?.savingsRewards)}</b>
           </h4>
-          <p className="green-text">First to complete contribution wins the rewards.</p>
+          {data?.winnerSelected ? (
+            <p className="green-text">
+              <span className="green-text">{addressAsName(data?.winner)}</span> has won the reward for fulfilling his
+              commitment first.
+            </p>
+          ) : (
+            <p className="green-text">First to complete contribution wins the rewards.</p>
+          )}
         </div>
         <hr />
         <h5 className="uppercase">Pool Participants ({data?.numberOfContributors})</h5>
-        {data?.participants?.map(participant => (
-          <div key={participant.username}>
-            <h3>{participant.username}'s contribution</h3>
-            <h4 className="text-light">
-              {formatter.format(participant.contribution)} / {formatter.format(data?.individualGoal)}
+        {contributions?.map(contribution => (
+          <div key={contribution.address}>
+            <h3>
+              {addressAsName(contribution.address)}
+              {contribution.address === address ? " (me)" : ""}
+              {contribution.address === data?.winner ? " ⭐" : ""}
+            </h3>
+            <h4>
+              {formatter.format(contribution.value)}{" "}
+              <span className="text-light">/ {formatter.format(data?.individualGoal)}</span>
             </h4>
           </div>
         ))}
       </div>
       <footer id="screen--footer">
-        <Link to={`/join/pool/${id}`}>
-          <span className="btn btn-lg btn-green">Invite your friends</span>
-        </Link>
         <Link to={`/contribution/pool/${id}`}>
-          <span className="btn btn-lg btn-blue">Complete contribution</span>
+          <span className="btn btn-lg btn-blue">Contribute to this pool</span>
         </Link>
-        <h4>31 days left</h4>
+        <h4>{daysLeft(data?.startDate, data?.endDate)} days left</h4>
       </footer>
     </div>
   );

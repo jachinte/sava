@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { poolContract } from "../hooks";
-import { addressAsName } from "../helpers";
+import { addressAsName, daysLeft } from "../helpers";
 import "./Home.css";
 
 function PoolItem({ data }) {
@@ -25,7 +25,7 @@ function PoolItem({ data }) {
           <b>
             {formatter.format(data.individualGoal)} {data.currency}
           </b>{" "}
-          in <b>{Math.round((data.endDate - data.startDate) / (24 * 3600))} days</b>.
+          in <b>{daysLeft(data.startDate, data.endDate)} days</b>.
         </p>
       </header>
       {data.participants ? (

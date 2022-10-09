@@ -1,7 +1,7 @@
 import "antd/dist/antd.css";
 import React, { useEffect, useState } from "react";
 import { Web3Auth } from "@web3auth/web3auth";
-import { CHAIN_NAMESPACES, WALLET_ADAPTERS } from "@web3auth/base";
+import { CHAIN_NAMESPACES } from "@web3auth/base";
 import { Redirect, Route, Switch, useHistory } from "react-router-dom";
 import { SignIn, Home, Pool, Invitation, Contribution, New, Confirmation } from "./views";
 import { CLIENT_ID, MUMBAI_CHAIN_ID, ALCHEMY_KEY } from "./constants";
@@ -94,8 +94,8 @@ function App(props) {
             {auth(<Home contract={contract} address={address} />)}
           </Route>
           <Route path="/new">{auth(<New />)}</Route>
-          <Route path="/pool/:id">{auth(<Pool contract={contract} />)}</Route>
-          <Route path="/contribution/pool/:id">{auth(<Contribution />)}</Route>
+          <Route path="/pool/:id">{auth(<Pool contract={contract} address={address} />)}</Route>
+          <Route path="/contribution/pool/:id">{auth(<Contribution contract={contract} address={address} />)}</Route>
           <Route path="/confirmation/:pool/:amount">{auth(<Confirmation />)}</Route>
         </Switch>
       </div>
