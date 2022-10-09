@@ -11,14 +11,6 @@ function App(props) {
   const history = useHistory();
   const [web3auth, setWeb3auth] = useState();
   const [provider, setProvider] = useState();
-  const [userInfo, setUserInfo] = useState();
-
-  const getUserInfo = async () => {
-    if (web3auth) {
-      const user = await web3auth.getUserInfo();
-      return user;
-    }
-  };
 
   useEffect(() => {
     const init = async () => {
@@ -36,28 +28,9 @@ function App(props) {
 
         setWeb3auth(web3auth);
 
-        await web3auth.initModal({
-          modalConfig: {
-            [WALLET_ADAPTERS.OPENLOGIN]: {
-              label: "openlogin",
-              loginMethods: {
-                email_passwordless: {
-                  showOnModal: false,
-                },
-                external_wallet: {
-                  showOnModal: false,
-                },
-              },
-            },
-            [WALLET_ADAPTERS.WALLET_CONNECT_V1]: {
-              label: "wallet_connect_v1",
-              showOnModal: false,
-            },
-          },
-        });
+        await web3auth.initModal();
         if (web3auth.provider) {
           setProvider(web3auth.provider);
-          setUserInfo(await getUserInfo());
         }
       } catch (error) {
         console.error(error);
@@ -76,7 +49,7 @@ function App(props) {
   };
 
   const auth = View => {
-    if (provider && userInfo) {
+    if (provider) {
       return View;
     }
     return (
@@ -101,7 +74,7 @@ function App(props) {
             <Invitation />
           </Route>
           <Route exact path="/home">
-            {auth(<Home provider={provider} userInfo={userInfo} />)}
+            {auth(<Home provider={provider} />)}
           </Route>
           <Route path="/new">{auth(<New />)}</Route>
           <Route path="/pool/:id">{auth(<Pool />)}</Route>
