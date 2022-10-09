@@ -27,11 +27,12 @@ contract YourContract {
     //Saving Pool Global Counter
     uint256 public autoincrementSavingPoolIndex; 
 
+    //A map of pools per creator
+    mapping(address => uint256[]) public poolsPerCreator; 
+
     //Event emmited when a user claim his funds
     event ClaimResponse (bool success, bytes data);
 
-    //Event emitted when a user create a saving pool
-    event NewSavingPool (uint256 index);
 
     constructor () payable {
         SavingPool storage firstSavingPool = savingPools.push();
@@ -44,6 +45,9 @@ contract YourContract {
         firstSavingPool.savingsRewards = 0;
         firstSavingPool.winnerSelected = false;
         firstSavingPool.winner = address(0);
+
+        //Add pool to creator list
+        poolsPerCreator[msg.sender].push(0);
 
         autoincrementSavingPoolIndex = 1; 
     }
@@ -66,10 +70,11 @@ contract YourContract {
         newSavingPool.savingsRewards = 0;
         newSavingPool.winnerSelected = false;
         newSavingPool.winner = address(0);
+        
+        //Add pool to creator list
+        poolsPerCreator[msg.sender].push(autoincrementSavingPoolIndex);
 
         autoincrementSavingPoolIndex++;
-
-        emit NewSavingPool(autoincrementSavingPoolIndex-1);
     }
 
     /**
@@ -298,6 +303,19 @@ contract YourContract {
     */
     function getContributorsInPool(uint savingPoolId) public view returns (address[] memory){
         return savingPools[savingPoolId].contributors;
+    }
+
+    /**
+    *@dev Get last pool index created by a user
+    *@param user The user who have created pools
+    *
+    */
+    function getLastPoolIndexPerCreator(address user) public view returns (uint256){
+        uint256[] memory createdPools = poolsPerCreator[user];
+
+        require(createdPools.length > 0, "The user has not created a pool");
+
+        return createdPools[createdPools.length-1];
     }
 
 }
