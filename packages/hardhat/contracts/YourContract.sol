@@ -27,8 +27,8 @@ contract YourContract {
     //Saving Pool Global Counter
     uint256 public autoincrementSavingPoolIndex; 
 
-    address public supplyTokenAddress = 0x0000000000000000000000000000000000001010; // Mumbai Aave MATIC
-    address public aavePoolAddress = 0x6C9fB0D5bD9429eb9Cd96B85B81d872281771E6B; // Mumbai Aave Pool Address
+    //Event
+    event ClaimResponse (bool success, bytes data);
 
 
     constructor () payable {
@@ -148,7 +148,7 @@ contract YourContract {
         //Transfer claimable savings to user
         //user.transfer(claimableSavings);
         (bool sent, bytes memory data) = user.call{value: claimableSavings}("");
-        require(sent, "Failed to send funds");
+        emit ClaimResponse(sent,data);
 
         //Update total savings claimed
         //currentSavingPool.claimedSavingsAmount += claimableSavings;
