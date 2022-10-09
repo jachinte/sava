@@ -67,7 +67,7 @@ contract YourContract {
 
         autoincrementSavingPoolIndex++;
 
-        return newSavingPool.savingPoolId;
+        return autoincrementSavingPoolIndex-1;
     }
 
     /**
