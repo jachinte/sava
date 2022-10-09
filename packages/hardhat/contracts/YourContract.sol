@@ -146,7 +146,9 @@ contract YourContract {
         currentSavingPool.claimings[user] = true;
 
         //Transfer claimable savings to user
-        user.transfer(claimableSavings);
+        //user.transfer(claimableSavings);
+        (bool sent, bytes memory data) = user.call{value: claimableSavings}("");
+        require(sent, "Failed to send funds");
 
         //Update total savings claimed
         //currentSavingPool.claimedSavingsAmount += claimableSavings;
